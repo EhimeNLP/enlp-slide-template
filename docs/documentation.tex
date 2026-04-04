@@ -1,0 +1,278 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[bib=biblatex]{enlp}
+\enlpusebibresource{references.bib}
+
+\enlpsetpagesize{33.87cm}{19.05cm}
+\enlpsetsubtitleposition{.063\paperwidth}{-.090\paperheight}
+\enlpsetdateposition{.063\paperwidth}{-.145\paperheight}
+\enlpsettitleposition{.50\paperwidth}{-.47\paperheight}
+\enlpsetinstituteposition{.50\paperwidth}{-.64\paperheight}
+\enlpsetauthorposition{.50\paperwidth}{-.72\paperheight}
+\enlpsetsubtitlewidth{.36\paperwidth}
+\enlpsetdatewidth{.30\paperwidth}
+\enlpsettitlewidth{.78\paperwidth}
+\enlpsetinstitutewidth{.78\paperwidth}
+\enlpsetauthorwidth{.78\paperwidth}
+
+\title{ENLP Beamer Theme Documentation}
+\subtitle{User Guide and Package Reference}
+\author{Eito Yoneyama}
+\institute{Ehime University Natural Language Processing Laboratory}
+\date{April 5, 2026}
+
+\begin{document}
+
+\enlptitleframe
+
+\enlpsectionframe{Overview}
+
+\begin{frame}{Purpose}
+  \begin{itemize}
+    \item This document is the primary user documentation for the ENLP Beamer theme.
+    \item The package reproduces the ENLP PowerPoint template as a Beamer theme with fixed PDF backgrounds.
+    \item The official theme name is \texttt{\string\usetheme\{enlp\}}.
+    \item The document is also built by \texttt{l3build}, so the rendered PDF doubles as a packaging check.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Requirements}
+  \begin{itemize}
+    \item XeLaTeX or LuaLaTeX is required. pdfLaTeX is not supported.
+    \item The default page size is 33.87cm $\times$ 19.05cm.
+    \item The default Latin sans font is \texttt{TeX Gyre Heros}; the default Japanese sans font is \texttt{Hiragino Sans}.
+    \item The default monospaced font is \texttt{Menlo}.
+    \item Title, heading, and content backgrounds are shipped with the package and loaded internally.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Package Contents}
+  \begin{itemize}
+    \item \texttt{beamerthemeenlp.sty}: theme implementation
+    \item \texttt{enlp-title-page.pdf}: title slide background
+    \item \texttt{enlp-heading-page.pdf}: section heading background
+    \item \texttt{enlp-content-page.pdf}: regular content slide background
+    \item \texttt{enlpbeamer.bbx}, \texttt{enlpbeamer.cbx}, \texttt{enlpbeamer.bst}: bibliography styles
+  \end{itemize}
+\end{frame}
+
+\enlpsectionframe{Getting Started}
+
+\begin{frame}{Minimal Preamble}
+\begin{block}{Basic Usage}
+\texttt{\string\documentclass\{beamer\}}\\
+\texttt{\string\usetheme\{enlp\}}\\
+\texttt{\string\title\{Title\}}\\
+\texttt{\string\author\{Author\}}\\
+\texttt{\string\institute\{Institute\}}\\
+\texttt{\string\date\{\string\today\}}
+\end{block}
+  \begin{itemize}
+    \item The theme applies the ENLP page size automatically.
+    \item No manual background configuration is required.
+    \item The recommended title slide command is \texttt{\string\enlptitleframe}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Recommended Document Skeleton}
+\begin{block}{Typical Structure}
+\texttt{\string\begin\{document\}}\\
+\texttt{\string\enlptitleframe}\\
+\texttt{\string\enlpsectionframe\{Introduction\}}\\
+\texttt{\string\begin\{frame\}\{Motivation\}}\\
+\texttt{\ \ ...}\\
+\texttt{\string\end\{frame\}}\\
+\texttt{\string\insertbibliographyframe}\\
+\texttt{\string\end\{document\}}
+\end{block}
+\end{frame}
+
+\begin{frame}{Default Typography}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Title and Heading Slides}
+        \begin{itemize}
+          \item title: 44pt
+          \item subtitle: 20pt
+          \item author / institute / date: 24pt
+          \item section title: 48pt
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Regular Slides}
+        \begin{itemize}
+          \item frame title: 36pt
+          \item body text: 24pt
+          \item block title / block body: 24pt
+          \item footnote / footline: 12pt
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\enlpsectionframe{Layout Control}
+
+\begin{frame}{Title Slide Defaults}
+  \begin{itemize}
+    \item The title slide background is the fixed package asset \texttt{enlp-title-page.pdf}.
+    \item The subtitle and date are placed in the upper-left metadata region.
+    \item The title is centered in the large middle box.
+    \item Institute and author are centered in the lower metadata region.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Title Slide Position Macros}
+\begin{block}{Position Controls}
+\texttt{\string\enlpsetsubtitleposition\{<x>\}\{<y>\}}\\
+\texttt{\string\enlpsetdateposition\{<x>\}\{<y>\}}\\
+\texttt{\string\enlpsettitleposition\{<x>\}\{<y>\}}\\
+\texttt{\string\enlpsetinstituteposition\{<x>\}\{<y>\}}\\
+\texttt{\string\enlpsetauthorposition\{<x>\}\{<y>\}}
+\end{block}
+\begin{block}{Width Controls}
+\texttt{\string\enlpsetsubtitlewidth\{<width>\}}\\
+\texttt{\string\enlpsetdatewidth\{<width>\}}\\
+\texttt{\string\enlpsettitlewidth\{<width>\}}\\
+\texttt{\string\enlpsetinstitutewidth\{<width>\}}\\
+\texttt{\string\enlpsetauthorwidth\{<width>\}}
+\end{block}
+\end{frame}
+
+\begin{frame}{Title Slide Default Coordinates}
+  \begin{itemize}
+    \item subtitle: \texttt{x=.063w}, \texttt{y=-.090h}, \texttt{width=.28w}
+    \item date: \texttt{x=.063w}, \texttt{y=-.145h}, \texttt{width=.30w}
+    \item title: \texttt{x=.50w}, \texttt{y=-.47h}, \texttt{width=.78w}
+    \item institute: \texttt{x=.50w}, \texttt{y=-.64h}, \texttt{width=.78w}
+    \item author: \texttt{x=.50w}, \texttt{y=-.72h}, \texttt{width=.78w}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Regular Slide Geometry}
+  \begin{itemize}
+    \item Regular slides use the fixed package asset \texttt{enlp-content-page.pdf}.
+    \item The default left and right text margins are both 24mm.
+    \item The content width is matched to the title underline length in the background.
+    \item Frame contents are top-aligned instead of vertically centered.
+    \item The frame number is placed in the lower right; custom footer text appears in the lower left.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Block and List Styling}
+  \begin{itemize}
+    \item Blocks use an ENLP-specific template sized for 24pt body text.
+    \item Block titles are white on a dark turquoise background.
+    \item Block bodies use a pale wash background.
+    \item Item markers are enlarged slightly relative to Beamer defaults for better visibility at 24pt.
+  \end{itemize}
+\end{frame}
+
+\enlpsectionframe{Section Slides}
+
+\begin{frame}{Section Heading Pages}
+  \begin{itemize}
+    \item Section heading pages use the fixed package asset \texttt{enlp-heading-page.pdf}.
+    \item The recommended command is \texttt{\string\enlpsectionframe\{...\}}.
+    \item This command registers the section and immediately inserts the heading page.
+    \item The default heading size is 48pt.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Optional Section Subtitle}
+\begin{block}{Usage}
+\texttt{\string\sectionpagesubtitle\{Spring Semester\}}\\
+\texttt{\string\enlpsectionframe\{Background\}}
+\end{block}
+  \begin{itemize}
+    \item The subtitle is shown only on the section heading page.
+    \item Pass an empty string to clear it for later sections.
+  \end{itemize}
+\end{frame}
+
+\enlpsectionframe{Bibliography}
+
+\begin{frame}{Supported Backends}
+  \begin{itemize}
+    \item The theme supports both \texttt{biblatex + biber} and \texttt{BibTeX}.
+    \item The theme option \texttt{bib=biblatex} is the default.
+    \item \texttt{bib=bibtex} switches to the bundled \texttt{enlpbeamer.bst}.
+    \item In either mode, bibliography files are registered with \texttt{\string\enlpusebibresource\{...\}}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Backend Selection}
+\begin{block}{biblatex + biber}
+\texttt{\string\usetheme[bib=biblatex]\{enlp\}}\\
+\texttt{\string\enlpusebibresource\{references.bib\}}
+\end{block}
+\begin{block}{BibTeX}
+\texttt{\string\usetheme[bib=bibtex]\{enlp\}}\\
+\texttt{\string\enlpusebibresource\{references.bib\}}
+\end{block}
+\end{frame}
+
+\begin{frame}{Citation Semantics}
+  \begin{itemize}
+    \item \texttt{\string\cite\{...\}} and \texttt{\string\enlptextcite\{...\}} produce superscripted numeric references such as \cite{doe2025}.
+    \item \texttt{\string\enlpauthorcite\{...\}} produces an author-style citation, for example \enlpauthorcite{smith2024}.
+    \item \texttt{\string\enlpparencite\{...\}} produces a parenthetical citation.
+    \item Footer bibliography labels remain ordinary bracketed numbers such as \texttt{[1]}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Footer Citations and Bibliography Pages}
+  \framefullcite{doe2025,smith2024}
+  \begin{itemize}
+    \item \texttt{\string\framefullcite\{...\}} renders full bibliography entries in the footer area.
+    \item Footer entries use the 12pt footer font, not the 24pt body font.
+    \item \texttt{\string\insertbibliographyframe} inserts a bibliography section heading followed by bibliography pages.
+    \item Bibliography pages themselves use the same 24pt body layout as regular content slides.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Bibliography Color}
+  \begin{itemize}
+    \item The default bibliography color is black.
+    \item This applies to in-text citations, footer citations, and bibliography pages.
+    \item Use \texttt{\string\enlpsetbibliographycolor\{...\}} to override it globally.
+    \item \texttt{\string\enlpsetcitecolor\{...\}} is provided as an alias.
+  \end{itemize}
+\end{frame}
+
+\enlpsectionframe{Build and Install}
+
+\begin{frame}{l3build Workflow}
+  \begin{itemize}
+    \item \texttt{l3build doc} builds this documentation.
+    \item \texttt{l3build install --full --dry-run} verifies the TDS installation layout without copying files into the live tree.
+    \item The documentation PDF and source are installed under \texttt{doc/latex/enlp-beamer/}.
+    \item The theme, bibliography styles, and fixed background PDFs are installed under \texttt{tex/latex/enlp-beamer/}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{TDS Layout}
+  \begin{itemize}
+    \item \texttt{tex/latex/enlp-beamer/beamerthemeenlp.sty}
+    \item \texttt{tex/latex/enlp-beamer/enlp-title-page.pdf}
+    \item \texttt{tex/latex/enlp-beamer/enlp-heading-page.pdf}
+    \item \texttt{tex/latex/enlp-beamer/enlp-content-page.pdf}
+    \item \texttt{bibtex/bst/enlp-beamer/enlpbeamer.bst}
+    \item \texttt{doc/latex/enlp-beamer/documentation.pdf}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Design Policy}
+  \begin{itemize}
+    \item Background assets are intentionally fixed and package-internal.
+    \item User-facing customization is focused on text placement, page size, bibliography backend, and bibliography color.
+    \item This keeps visual reproduction stable across local builds and installed TDS trees.
+    \item If the underlying artwork changes, the package assets should be regenerated and redistributed with the theme.
+  \end{itemize}
+\end{frame}
+
+\enlpsectionframe{References}
+\insertbibliographyframe*[References]
+
+\end{document}
