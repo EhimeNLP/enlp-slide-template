@@ -1,0 +1,41 @@
+\input regression-test.tex
+\documentclass{article}
+\usepackage{iftex}
+
+\newcommand\ENLPReportEngine{%
+  \ifLuaTeX
+    \TYPE{engine=luatex}%
+  \else
+    \ifupTeX
+      \TYPE{engine=uptex}%
+    \else
+      \ifpTeX
+        \TYPE{engine=ptex}%
+      \else
+        \TYPE{engine=unknown}%
+      \fi
+    \fi
+  \fi
+}
+
+\newcommand\ENLPReportFile[1]{%
+  \IfFileExists{#1}{%
+    \TYPE{#1=yes}%
+  }{%
+    \TYPE{#1=no}%
+  }%
+}
+
+\begin{document}
+\START
+\TYPE{ENLP build smoke test}
+\ENLPReportEngine
+\ENLPReportFile{beamerthemeenlp.sty}
+\ENLPReportFile{enlpbeamer.bbx}
+\ENLPReportFile{enlpbeamer.cbx}
+\ENLPReportFile{enlpbeamer.bst}
+\ENLPReportFile{enlp-title-page.pdf}
+\ENLPReportFile{enlp-heading-page.pdf}
+\ENLPReportFile{enlp-content-page.pdf}
+\END
+\end{document}
