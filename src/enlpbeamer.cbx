@@ -1,0 +1,31 @@
+%%
+%% This is file `enlpbeamer.cbx',
+%% A BibLaTeX citation style for the Ehime NLP Lab Beamer theme.
+%%
+%% Author: Eito Yoneyama
+%% Created: 2026/04/05
+%%
+\ProvidesFile{enlpbeamer.cbx}[2026/04/05 ENLP Beamer biblatex citation style]
+
+\RequireCitationStyle{numeric-comp}
+
+\DeclareCiteCommand{\cite}[\mkbibsuperscript]
+  {\usebibmacro{cite:init}%
+   \let\multicitedelim=\supercitedelim
+   \let\multicitesubentrydelim=\supercitesubentrydelim
+   \let\multiciterangedelim=\superciterangedelim
+   \let\multicitesubentryrangedelim=\supercitesubentryrangedelim
+   \bibopenbracket
+   \iffieldundef{prenote}
+     {}
+     {\BibliographyWarning{Ignoring prenote argument}}%
+   \iffieldundef{postnote}
+     {}
+     {\BibliographyWarning{Ignoring postnote argument}}}
+  {\usebibmacro{citeindex}%
+   \usebibmacro{cite:comp}}
+  {}
+  {\usebibmacro{cite:dump}%
+   \bibclosebracket}
+
+\DeclareMultiCiteCommand{\cites}[\mkbibsuperscript]{\cite}{\supercitedelim}
