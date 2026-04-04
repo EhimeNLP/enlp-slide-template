@@ -1,0 +1,499 @@
+%%
+%% This is file `beamerthemeenlp.sty',
+%% A LaTeX package for the Ehime NLP Lab Beamer theme.
+%%
+%% Author: Eito Yoneyama
+%% Created: 2026/04/05
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeenlp}[2026/04/05 Ehime NLP Lab Beamer theme]
+
+\RequirePackage{etoolbox}
+\RequirePackage{graphicx}
+\RequirePackage{iftex}
+\RequirePackage[absolute,overlay]{textpos}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+
+\ifPDFTeX
+  \PackageError{beamerthemeenlp}{This theme requires XeLaTeX or LuaLaTeX}{Compile with xelatex or lualatex.}
+\fi
+
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\ifLuaTeX
+  \RequirePackage{luatexja-fontspec}
+  \setmainfont{Helvetica Neue}
+  \setsansfont{Helvetica Neue}
+  \setmonofont{Menlo}
+  \setmainjfont[
+    UprightFont=* W3,
+    BoldFont=* W6,
+    YokoFeatures={JFM=prop}
+  ]{Hiragino Sans}
+  \setsansjfont[
+    UprightFont=* W3,
+    BoldFont=* W6,
+    YokoFeatures={JFM=prop}
+  ]{Hiragino Sans}
+\else
+  \RequirePackage{xeCJK}
+  \setmainfont{Helvetica Neue}
+  \setsansfont{Helvetica Neue}
+  \setmonofont{Menlo}
+  \setCJKmainfont[
+    BoldFont={Hiragino Sans W6}
+  ]{Hiragino Sans W3}
+  \setCJKsansfont[
+    BoldFont={Hiragino Sans W6}
+  ]{Hiragino Sans W3}
+\fi
+\renewcommand{\familydefault}{\sfdefault}
+
+\definecolor{enlpPrimary}{HTML}{19999A}
+\definecolor{enlpPrimaryDark}{HTML}{046969}
+\definecolor{enlpPrimarySoft}{HTML}{759F99}
+\definecolor{enlpText}{HTML}{222222}
+\definecolor{enlpMuted}{HTML}{6E7474}
+\definecolor{enlpRule}{HTML}{B8C1C1}
+\definecolor{enlpBorder}{HTML}{C5CBCB}
+\definecolor{enlpWash}{HTML}{EAF3F1}
+\definecolor{enlpArcDark}{HTML}{6B7A7A}
+\definecolor{enlpArcLight}{HTML}{D7E1E2}
+\colorlet{enlpBibliographyColor}{black}
+
+\newcommand{\enlp@selectedbibmode}{biblatex}
+\newcommand{\enlp@biblatexoptions}{}
+\newcommand{\enlp@bibtexoptions}{numbers,sort&compress,super}
+\newcommand{\enlp@bibtexstyle}{enlpbeamer}
+\DeclareOptionBeamer{bib}[biblatex]{\def\enlp@selectedbibmode{#1}}
+\DeclareOptionBeamer{biblatex}{\def\enlp@selectedbibmode{biblatex}}
+\DeclareOptionBeamer{bibtex}{\def\enlp@selectedbibmode{bibtex}}
+\DeclareOptionBeamer{biblatexopts}{\def\enlp@biblatexoptions{#1}}
+\DeclareOptionBeamer{bibtexopts}{\def\enlp@bibtexoptions{#1}}
+\DeclareOptionBeamer{bibtexstyle}{\def\enlp@bibtexstyle{#1}}
+\ProcessOptionsBeamer
+
+\newcommand{\enlp@pagewidth}{33.87cm}
+\newcommand{\enlp@pageheight}{19.05cm}
+\newcommand{\enlp@applypagesize}{%
+  \setlength{\paperwidth}{\enlp@pagewidth}%
+  \setlength{\paperheight}{\enlp@pageheight}%
+  \geometry{paperwidth=\enlp@pagewidth,paperheight=\enlp@pageheight}%
+}
+\newcommand{\enlpsetpagesize}[2]{%
+  \gdef\enlp@pagewidth{#1}%
+  \gdef\enlp@pageheight{#2}%
+  \enlp@applypagesize
+}
+\enlp@applypagesize
+\newcommand{\enlp@titlebgpath}{enlp-title-page.pdf}
+\newcommand{\enlp@headingbgpath}{enlp-heading-page.pdf}
+\newcommand{\enlp@contentbgpath}{enlp-content-page.pdf}
+\newcommand{\enlp@activebgpath}{}
+\newcommand{\enlp@applybibliographycolor}{%
+  \hypersetup{citecolor=enlpBibliographyColor}%
+  \setbeamercolor{bibliography item}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry author}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry title}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry location}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry note}{fg=enlpBibliographyColor}%
+}
+\newcommand{\enlpsetbibliographycolor}[1]{%
+  \colorlet{enlpBibliographyColor}{#1}%
+  \enlp@applybibliographycolor
+}
+\newcommand{\enlpsetcitecolor}[1]{\enlpsetbibliographycolor{#1}}
+\newcommand{\enlp@setactivebackground}[1]{\xdef\enlp@activebgpath{#1}}
+\enlp@setactivebackground{\enlp@contentbgpath}
+\newcommand{\enlp@framefooter}{}
+\newcommand{\enlp@sectionsubtitle}{}
+\newcommand{\enlp@bibmode}{none}
+\newcommand{\enlp@bibfiles}{}
+\newcommand{\enlp@subtitlex}{.063\paperwidth}
+\newcommand{\enlp@subtitley}{-.090\paperheight}
+\newcommand{\enlp@subtitlewidth}{.28\paperwidth}
+\newcommand{\enlp@datex}{.063\paperwidth}
+\newcommand{\enlp@datey}{-.145\paperheight}
+\newcommand{\enlp@datewidth}{.30\paperwidth}
+\newcommand{\enlp@titlex}{.50\paperwidth}
+\newcommand{\enlp@titley}{-.47\paperheight}
+\newcommand{\enlp@titlewidth}{.78\paperwidth}
+\newcommand{\enlp@institutex}{.50\paperwidth}
+\newcommand{\enlp@institutey}{-.64\paperheight}
+\newcommand{\enlp@institutewidth}{.78\paperwidth}
+\newcommand{\enlp@authorx}{.50\paperwidth}
+\newcommand{\enlp@authory}{-.72\paperheight}
+\newcommand{\enlp@authorwidth}{.78\paperwidth}
+\newlength{\enlp@contentleftmargin}
+\newlength{\enlp@contentrightmargin}
+\newlength{\enlp@frametitletopskip}
+\newlength{\enlp@frametitleinnerleft}
+\newlength{\enlp@frametitleheight}
+\newlength{\enlp@frametitledepth}
+\newlength{\enlp@afterframetitleskip}
+\setlength{\enlp@contentleftmargin}{24.0mm}
+\setlength{\enlp@contentrightmargin}{24.0mm}
+\setlength{\enlp@frametitletopskip}{10.8mm}
+\setlength{\enlp@frametitleinnerleft}{1.6mm}
+\setlength{\enlp@frametitleheight}{15.2mm}
+\setlength{\enlp@frametitledepth}{2.0mm}
+\setlength{\enlp@afterframetitleskip}{5.2mm}
+\newif\ifenlp@firstfootercite
+\newcommand{\framefooter}[1]{\gdef\enlp@framefooter{#1}}
+\newcommand{\sectionpagesubtitle}[1]{\gdef\enlp@sectionsubtitle{#1}}
+\newcommand{\enlpsetsubtitleposition}[2]{%
+  \gdef\enlp@subtitlex{#1}%
+  \gdef\enlp@subtitley{#2}%
+}
+\newcommand{\enlpsetsubtitlewidth}[1]{\gdef\enlp@subtitlewidth{#1}}
+\newcommand{\enlpsetdateposition}[2]{%
+  \gdef\enlp@datex{#1}%
+  \gdef\enlp@datey{#2}%
+}
+\newcommand{\enlpsetdatewidth}[1]{\gdef\enlp@datewidth{#1}}
+\newcommand{\enlpsettitleposition}[2]{%
+  \gdef\enlp@titlex{#1}%
+  \gdef\enlp@titley{#2}%
+}
+\newcommand{\enlpsettitlewidth}[1]{\gdef\enlp@titlewidth{#1}}
+\newcommand{\enlpsetinstituteposition}[2]{%
+  \gdef\enlp@institutex{#1}%
+  \gdef\enlp@institutey{#2}%
+}
+\newcommand{\enlpsetinstitutewidth}[1]{\gdef\enlp@institutewidth{#1}}
+\newcommand{\enlpsetauthorposition}[2]{%
+  \gdef\enlp@authorx{#1}%
+  \gdef\enlp@authory{#2}%
+}
+\newcommand{\enlpsetauthorwidth}[1]{\gdef\enlp@authorwidth{#1}}
+\newcommand{\enlp@natbiblabelcite}[1]{[\citenum{#1}]}
+\newcommand{\enlp@footcitelabel}[1]{%
+  \begingroup
+  \NoHyper
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \parencite{#1}%
+  }{%
+    \enlp@natbiblabelcite{#1}%
+  }%
+  \endNoHyper
+  \endgroup
+}
+\newcommand{\enlpusebiblatex}[2][]{%
+  \@ifpackageloaded{biblatex}{}{%
+    \RequirePackage[
+      backend=biber,
+      style=enlpbeamer,
+      #1
+    ]{biblatex}%
+  }%
+  \gdef\enlp@bibmode{biblatex}%
+  \addbibresource{#2}%
+}
+\newcommand{\enlpusebibtex}[3][]{%
+  \@ifpackageloaded{natbib}{}{%
+    \RequirePackage[#1]{natbib}%
+  }%
+  \@ifpackageloaded{bibentry}{}{%
+    \RequirePackage{bibentry}%
+  }%
+  \gdef\enlp@bibmode{bibtex}%
+  \gdef\enlp@bibfiles{#3}%
+  \bibliographystyle{#2}%
+  \nobibliography*%
+}
+\newcommand{\enlpusebibresource}[1]{%
+  \ifdefstring{\enlp@selectedbibmode}{bibtex}{%
+    \filename@parse{#1}%
+    \edef\enlp@resolvedbibfile{\filename@area\filename@base}%
+    \expandafter\enlpusebibtex\expandafter[\enlp@bibtexoptions]{\enlp@bibtexstyle}{\enlp@resolvedbibfile}%
+  }{%
+    \expandafter\enlpusebiblatex\expandafter[\enlp@biblatexoptions]{#1}%
+  }%
+}
+\newcommand{\enlp@requirebibsupport}[1]{%
+  \ifdefstring{\enlp@bibmode}{none}{%
+    \PackageError{beamerthemeenlp}{#1 requires bibliography setup}{%
+      Use \string\enlpusebibresource, \string\enlpusebibtex, or \string\enlpusebiblatex\space in the preamble.%
+    }%
+  }{}%
+}
+\newcommand{\enlp@sectionpageframe}[1]{%
+  \def\insertsectionhead{#1}%
+  \enlp@setactivebackground{\enlp@headingbgpath}%
+  \begin{frame}[plain,noframenumbering]
+    \sectionpage
+  \end{frame}
+  \enlp@setactivebackground{\enlp@contentbgpath}%
+}
+\newcommand{\enlptitleframe}{%
+  \enlp@setactivebackground{\enlp@titlebgpath}%
+  \begin{frame}[plain,noframenumbering]
+    \titlepage
+  \end{frame}
+  \enlp@setactivebackground{\enlp@contentbgpath}%
+}
+\newcommand{\enlpsectionframe}[2][]{%
+  \ifstrempty{#1}{%
+    \section{#2}%
+  }{%
+    \section[#1]{#2}%
+  }%
+  \enlp@sectionpageframe{#2}%
+}
+\newcommand{\enlp@silentsection}[1]{%
+  \begingroup
+  \let\beamer@atbeginsection\@empty
+  \let\beamer@atbeginsections\@empty
+  \section{#1}%
+  \endgroup
+}
+\newcommand{\enlp@printfullcite}[1]{%
+  {\color{enlpBibliographyColor}\enlp@footcitelabel{#1}}\space
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \renewcommand*{\finentrypunct}{}%
+    {\color{enlpBibliographyColor}\fullcite{#1}}%
+  }{%
+    \ifdefstring{\enlp@bibmode}{bibtex}{%
+      {\color{enlpBibliographyColor}\bibentry{#1}}%
+    }{%
+      \enlp@requirebibsupport{\string\framefullcite}%
+    }%
+  }%
+}
+\newcommand{\enlp@renderfullcites}[1]{%
+  \begingroup
+  \enlp@requirebibsupport{\string\framefullcite}%
+  \enlp@firstfootercitetrue
+  \def\do##1{%
+    \ifenlp@firstfootercite
+      \enlp@firstfootercitefalse
+    \else
+      \par
+    \fi
+    \enlp@printfullcite{##1}%
+  }%
+  \docsvlist{#1}%
+  \endgroup
+}
+\newcommand{\framefullcite}[1]{%
+  \framefooter{\enlp@renderfullcites{#1}}%
+}
+\newcommand{\enlptextcite}[1]{%
+  \enlp@requirebibsupport{\string\enlptextcite}%
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \cite{#1}%
+  }{%
+    \cite{#1}%
+  }%
+}
+\newcommand{\enlpauthorcite}[1]{%
+  \enlp@requirebibsupport{\string\enlpauthorcite}%
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \textcite{#1}%
+  }{%
+    \citet{#1}%
+  }%
+}
+\newcommand{\enlpparencite}[1]{%
+  \enlp@requirebibsupport{\string\enlpparencite}%
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \parencite{#1}%
+  }{%
+    \citep{#1}%
+  }%
+}
+\newcommand{\enlp@insertbibliographyframebody}[1]{%
+  \enlp@requirebibsupport{\string\insertbibliographyframe}%
+  \begingroup
+  \setbeamertemplate{frametitle continuation}{}%
+  \setbeamerfont{bibliography item}{size=\fontsize{24}{30}\selectfont}%
+  \setbeamerfont{bibliography entry author}{size=\fontsize{24}{30}\selectfont}%
+  \setbeamerfont{bibliography entry title}{size=\fontsize{24}{30}\selectfont}%
+  \setbeamerfont{bibliography entry location}{size=\fontsize{24}{30}\selectfont}%
+  \setbeamerfont{bibliography entry note}{size=\fontsize{24}{30}\selectfont}%
+  \@ifundefined{bibfont}{}{%
+    \renewcommand*{\bibfont}{\fontsize{24}{30}\selectfont}%
+  }%
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \begin{frame}[allowframebreaks]
+      \frametitle{#1}%
+      {\color{enlpBibliographyColor}\printbibliography[heading=none]}%
+    \end{frame}
+  }{%
+    \begin{frame}[allowframebreaks]
+      \frametitle{#1}%
+      {\color{enlpBibliographyColor}\bibliography{\enlp@bibfiles}}%
+    \end{frame}
+  }%
+  \endgroup
+}
+\newcommand{\insertbibliographyframe}{%
+  \@ifstar{\enlp@insertbibliographyframewithoutsection}{\enlp@insertbibliographyframewithsection}%
+}
+\newcommand{\enlp@insertbibliographyframewithsection}[1][参考文献]{%
+  \enlp@silentsection{#1}%
+  \enlp@sectionpageframe{#1}%
+  \enlp@insertbibliographyframebody{#1}%
+}
+\newcommand{\enlp@insertbibliographyframewithoutsection}[1][参考文献]{%
+  \enlp@insertbibliographyframebody{#1}%
+}
+\AtBeginEnvironment{frame}{\gdef\enlp@framefooter{}}
+
+\mode<presentation>
+
+\setbeamersize{text margin left=\the\enlp@contentleftmargin,text margin right=\the\enlp@contentrightmargin}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{bibliography item}[text]
+\setbeamertemplate{items}[circle]
+
+\setbeamercolor{normal text}{fg=enlpText,bg=white}
+\setbeamercolor{structure}{fg=enlpPrimaryDark}
+\setbeamercolor{title}{fg=enlpText}
+\setbeamercolor{subtitle}{fg=enlpMuted}
+\setbeamercolor{frametitle}{fg=enlpText,bg=white}
+\setbeamercolor{framesubtitle}{fg=enlpMuted}
+\setbeamercolor{block title}{fg=white,bg=enlpPrimaryDark}
+\setbeamercolor{block body}{fg=enlpText,bg=enlpWash}
+\setbeamercolor{item projected}{fg=white,bg=enlpPrimaryDark}
+\enlp@applybibliographycolor
+
+\setbeamerfont{normal text}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{title}{size=\fontsize{44}{52}\selectfont,series=\mdseries}
+\setbeamerfont{subtitle}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{author}{size=\fontsize{24}{28}\selectfont}
+\setbeamerfont{institute}{size=\fontsize{24}{28}\selectfont}
+\setbeamerfont{date}{size=\fontsize{24}{28}\selectfont}
+\setbeamerfont{frametitle}{size=\fontsize{36}{42}\selectfont,series=\mdseries}
+\setbeamerfont{framesubtitle}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{section title}{size=\fontsize{48}{56}\selectfont,series=\mdseries}
+\setbeamerfont{section subtitle}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{footline}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{footnote}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{footnote mark}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{block body}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{block body alerted}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{block body example}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{itemize/enumerate body}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{itemize/enumerate subbody}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{block title}{size=\fontsize{24}{30}\selectfont,series=\bfseries}
+
+\setbeamertemplate{itemize item}{\color{enlpPrimaryDark}\raise0.22ex\hbox{\fontsize{18}{18}\selectfont$\bullet$}}
+\setbeamertemplate{itemize subitem}{\color{enlpPrimarySoft}\raise0.22ex\hbox{\fontsize{12}{12}\selectfont$\blacksquare$}}
+
+\makeatletter
+\beamer@centeredfalse
+\define@key{beamerframe}{t}[true]{%
+  \beamer@frametopskip=0pt\relax%
+  \beamer@framebottomskip=0pt plus 0.001fill\relax%
+  \beamer@frametopskipautobreak=\beamer@frametopskip\relax%
+  \beamer@framebottomskipautobreak=\beamer@framebottomskip\relax%
+}
+
+\AtBeginEnvironment{frame}{%
+  \usebeamerfont{normal text}%
+  \usebeamercolor[fg]{normal text}%
+}
+
+\defbeamertemplate{block begin}{enlp}{%
+  \par\vskip\medskipamount%
+  \begin{beamercolorbox}[wd=\linewidth,sep=1.4mm,leftskip=1.6mm,rightskip=1.6mm]{block title}%
+    \usebeamerfont{block title}\insertblocktitle%
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \begin{beamercolorbox}[wd=\linewidth,sep=1.8mm,leftskip=1.6mm,rightskip=1.6mm,vmode]{block body}%
+    \usebeamerfont{block body}%
+}
+
+\defbeamertemplate{block end}{enlp}{%
+  \end{beamercolorbox}%
+}
+
+\defbeamertemplate*{title page}{enlp}{
+  \ifx\insertsubtitle\@empty\else
+    \begin{textblock*}{\enlp@subtitlewidth}(\enlp@subtitlex,\dimexpr0pt-\enlp@subtitley\relax)
+      {\raggedright\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+    \end{textblock*}
+  \fi
+  \ifx\insertdate\@empty\else
+    \begin{textblock*}{\enlp@datewidth}(\enlp@datex,\dimexpr0pt-\enlp@datey\relax)
+      {\raggedright\usebeamerfont{date}\color{enlpText}\insertdate\par}
+    \end{textblock*}
+  \fi
+  \begin{textblock*}{\enlp@titlewidth}(\dimexpr\enlp@titlex-\enlp@titlewidth/2\relax,\dimexpr0pt-\enlp@titley\relax)
+    {\centering\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+  \end{textblock*}
+  \ifx\insertinstitute\@empty\else
+    \begin{textblock*}{\enlp@institutewidth}(\dimexpr\enlp@institutex-\enlp@institutewidth/2\relax,\dimexpr0pt-\enlp@institutey\relax)
+      {\centering\usebeamerfont{institute}\color{enlpText}\insertinstitute\par}
+    \end{textblock*}
+  \fi
+  \begin{textblock*}{\enlp@authorwidth}(\dimexpr\enlp@authorx-\enlp@authorwidth/2\relax,\dimexpr0pt-\enlp@authory\relax)
+    {\centering\usebeamerfont{author}\color{enlpText}\insertauthor\par}
+  \end{textblock*}
+  \null
+}
+
+\defbeamertemplate*{headline}{enlp}{}
+
+\defbeamertemplate*{background}{enlp}{%
+  \ifstrempty{\enlp@activebgpath}{}{%
+    \begin{tikzpicture}[remember picture,overlay]
+      \node[anchor=center,inner sep=0pt] at (current page.center)
+        {\includegraphics[width=\paperwidth,height=\paperheight]{\enlp@activebgpath}};
+    \end{tikzpicture}%
+  }%
+}
+
+\defbeamertemplate*{frametitle}{enlp}{
+  \vspace*{\enlp@frametitletopskip}
+  \begin{beamercolorbox}[wd=\dimexpr\paperwidth-\enlp@contentleftmargin-\enlp@contentrightmargin\relax,ht=\enlp@frametitleheight,dp=\enlp@frametitledepth,left]{frametitle}
+    \hspace*{\enlp@frametitleinnerleft}\usebeamerfont{frametitle}\insertframetitle
+    \ifx\insertframesubtitle\@empty\else
+      \par\vspace{0.9mm}
+      \hspace*{\enlp@frametitleinnerleft}{\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle}
+    \fi
+  \end{beamercolorbox}
+  \vspace{\enlp@afterframetitleskip}
+}
+
+\defbeamertemplate*{footline}{enlp}{
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west,text width=.72\paperwidth,inner sep=0pt,align=left]
+      at ([xshift=.069\paperwidth,yshift=.045\paperheight]current page.south west)
+      {\usebeamerfont{footline}\color{enlpMuted}\enlp@framefooter};
+    \node[anchor=south east,inner sep=0pt]
+      at ([xshift=-.031\paperwidth,yshift=.043\paperheight]current page.south east)
+      {\usebeamerfont{footline}\color{enlpMuted}\insertframenumber};
+  \end{tikzpicture}
+  \vspace{5.8mm}
+}
+
+\defbeamertemplate*{section page}{enlp}{
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=center,text width=.76\paperwidth,align=center]
+      at ([yshift=.012\paperheight]current page.center)
+      {\usebeamerfont{section title}\color{enlpText}\insertsectionhead};
+    \ifx\enlp@sectionsubtitle\@empty\else
+      \node[anchor=center,text width=.56\paperwidth,align=center]
+        at ([yshift=-.126\paperheight]current page.center)
+        {\usebeamerfont{section subtitle}\color{enlpMuted}\enlp@sectionsubtitle};
+    \fi
+  \end{tikzpicture}
+  \vspace*{.74\paperheight}
+}
+
+\makeatother
+
+\setbeamertemplate{background}[enlp]
+\setbeamertemplate{title page}[enlp]
+\setbeamertemplate{headline}[enlp]
+\setbeamertemplate{frametitle}[enlp]
+\setbeamertemplate{footline}[enlp]
+\setbeamertemplate{section page}[enlp]
+\setbeamertemplate{block begin}[enlp]
+\setbeamertemplate{block end}[enlp]
+
+\mode<all>
