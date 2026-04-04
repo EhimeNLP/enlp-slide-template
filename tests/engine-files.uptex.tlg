@@ -1,0 +1,11 @@
+This is a generated file for the l3build validation system.
+Don't change this file in any respect.
+ENLP build smoke test
+engine=uptex
+beamerthemeenlp.sty=yes
+enlpbeamer.bbx=yes
+enlpbeamer.cbx=yes
+enlpbeamer.bst=yes
+enlp-title-page.pdf=yes
+enlp-heading-page.pdf=yes
+enlp-content-page.pdf=yes
