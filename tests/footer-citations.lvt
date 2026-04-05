@@ -1,0 +1,36 @@
+\input regression-test.tex
+\def\ENLPClassOptions{}
+\ifdefined\kanjiskip
+  \edef\ENLPClassOptions{dvipdfmx}
+\fi
+\expandafter\documentclass\expandafter[\ENLPClassOptions]{beamer}
+\usetheme[bib=biblatex]{enlp}
+\enlpusebibresource{references.bib}
+
+\makeatletter
+\newcommand\ENLPReportAutoCites{%
+  \TYPE{autocitekeys=\enlp@autocitekeys}%
+}
+\newcommand\ENLPReportManualFooter{%
+  \begingroup
+  \edef\ENLPManualFooter{\detokenize\expandafter{\enlp@framefooter}}%
+  \TYPE{manualfooter=\ENLPManualFooter}%
+  \endgroup
+}
+\makeatother
+
+\begin{document}
+\START
+\TYPE{ENLP auto footer citation test}
+\begin{frame}{Automatic Footer}
+  Auto footer cites \cite{doe2025} and \cite{doe2025,smith2024}.
+  \ENLPReportAutoCites
+\end{frame}
+\begin{frame}{Manual Footer}
+  \framefooter{manual footer}
+  Manual footer still allows \cite{smith2024} in the body.
+  \ENLPReportManualFooter
+  \ENLPReportAutoCites
+\end{frame}
+\END
+\end{document}
