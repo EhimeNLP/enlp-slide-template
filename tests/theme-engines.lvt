@@ -1,0 +1,61 @@
+\input regression-test.tex
+\def\ENLPClassOptions{}
+\ifdefined\kanjiskip
+  \edef\ENLPClassOptions{dvipdfmx}
+\fi
+\expandafter\documentclass\expandafter[\ENLPClassOptions]{beamer}
+\usepackage{iftex}
+\usetheme{enlp}
+
+\makeatletter
+\newcommand\ENLPReportEngine{%
+  \ifLuaTeX
+    \TYPE{engine=luatex}%
+  \else
+    \ifXeTeX
+      \TYPE{engine=xetex}%
+    \else
+      \ifupTeX
+        \TYPE{engine=uptex}%
+      \else
+        \ifpTeX
+          \TYPE{engine=ptex}%
+        \else
+          \TYPE{engine=unknown}%
+        \fi
+      \fi
+    \fi
+  \fi
+}
+\newcommand\ENLPReportKanjiFamily{%
+  \@ifundefined{kanjifamilydefault}{%
+    \TYPE{kanjifamilydefault=undefined}%
+  }{%
+    \TYPE{kanjifamilydefault=\kanjifamilydefault}%
+  }%
+}
+\makeatother
+
+\title{和文 English Title}
+\subtitle{日本語と English の混植確認}
+\author{山田 太郎 / Taro Yamada}
+\institute{愛媛大学 NLP Lab}
+\date{2026-04-05}
+
+\begin{document}
+\START
+\TYPE{ENLP theme engine smoke test}
+\ENLPReportEngine
+\TYPE{pgfdriver=\pgfsysdriver}
+\TYPE{familydefault=\familydefault}
+\ENLPReportKanjiFamily
+\enlptitleframe
+\begin{frame}{和欧混植 Mixed Typesetting}
+  日本語とEnglishが同じ段落で自然につながることを確認する。
+
+  \textbf{太字 Bold} と \texttt{code\_sample} も合わせて確認する。
+\end{frame}
+\TYPE{titleframe=ok}
+\TYPE{contentframe=ok}
+\END
+\end{document}
