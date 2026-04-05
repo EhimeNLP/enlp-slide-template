@@ -38,11 +38,21 @@
 
 \begin{frame}{Requirements}
   \begin{itemize}
-    \item XeLaTeX or LuaLaTeX is required. pdfLaTeX is not supported.
+    \item LuaLaTeX, XeLaTeX, pLaTeX, and upLaTeX are supported. pdfLaTeX is not supported.
+    \item pLaTeX and upLaTeX must use \texttt{dvipdfmx}, i.e.\ \texttt{\string\documentclass[dvipdfmx]\{beamer\}}.
     \item The default page size is 33.87cm $\times$ 19.05cm.
-    \item The default Latin sans font is \texttt{TeX Gyre Heros}; the default Japanese sans font is \texttt{Hiragino Sans}.
-    \item The default monospaced font is \texttt{Menlo}.
+    \item The default Latin sans font is \texttt{TeX Gyre Heros}; the default Japanese sans font is \texttt{HaranoAji Gothic}.
+    \item The default monospaced font is \texttt{Latin Modern Mono}.
     \item Title, heading, and content backgrounds are shipped with the package and loaded internally.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Engine-Specific Notes}
+  \begin{itemize}
+    \item LuaLaTeX and XeLaTeX use Unicode-native Japanese support and the bundled HaranoAji font family.
+    \item pLaTeX and upLaTeX use a \texttt{dvipdfmx}-based workflow with \texttt{pxchfon} and \texttt{pxjahyper}.
+    \item The theme defaults both Latin and Japanese body text to sans serif so mixed Japanese-Latin slides stay visually consistent.
+    \item Hyperlinks and bookmarks are configured for Unicode output across every supported engine.
   \end{itemize}
 \end{frame}
 
@@ -58,7 +68,7 @@
 
 \enlpsectionframe{Getting Started}
 
-\begin{frame}{Minimal Preamble}
+\begin{frame}{Minimal Preamble for LuaLaTeX / XeLaTeX}
 \begin{block}{Basic Usage}
 \texttt{\string\documentclass\{beamer\}}\\
 \texttt{\string\usetheme\{enlp\}}\\
@@ -70,6 +80,23 @@
   \begin{itemize}
     \item The theme applies the ENLP page size automatically.
     \item No manual background configuration is required.
+    \item Japanese and Latin text are both initialized to sans-serif defaults for stable mixed-script slides.
+    \item The recommended title slide command is \texttt{\string\enlptitleframe}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Minimal Preamble for pLaTeX / upLaTeX}
+\begin{block}{Basic Usage}
+\texttt{\string\documentclass[dvipdfmx]\{beamer\}}\\
+\texttt{\string\usetheme\{enlp\}}\\
+\texttt{\string\title\{Title\}}\\
+\texttt{\string\author\{Author\}}\\
+\texttt{\string\institute\{Institute\}}\\
+\texttt{\string\date\{\string\today\}}
+\end{block}
+  \begin{itemize}
+    \item The document class must use the \texttt{dvipdfmx} option.
+    \item The same mixed Japanese-Latin sans-serif defaults are applied after the theme loads.
     \item The recommended title slide command is \texttt{\string\enlptitleframe}.
   \end{itemize}
 \end{frame}
@@ -85,6 +112,72 @@
 \texttt{\string\insertbibliographyframe}\\
 \texttt{\string\end\{document\}}
 \end{block}
+\end{frame}
+
+\begin{frame}{Custom Fonts Overview}
+  \begin{itemize}
+    \item Custom fonts can already be configured in the preamble after \texttt{\string\usetheme\{enlp\}}.
+    \item LuaLaTeX uses the \texttt{fontspec} and \texttt{luatexja-fontspec} interfaces.
+    \item XeLaTeX uses the \texttt{fontspec} and \texttt{xeCJK} interfaces.
+    \item pLaTeX and upLaTeX use \texttt{pxchfon} for Japanese fonts and regular NFSS family selection for Latin fonts.
+    \item Because the theme defaults to sans-serif and gothic text, update the sans and Japanese gothic side when changing body fonts.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Custom Fonts with LuaLaTeX}
+\begin{block}{Example}
+\small
+\texttt{\string\usetheme\{enlp\}}\\
+\texttt{\string\setmainfont\{TeX Gyre Termes\}}\\
+\texttt{\string\setsansfont\{IBM Plex Sans\}}\\
+\texttt{\string\setmonofont\{JetBrains Mono\}}\\
+\texttt{\string\setmainjfont[BoldFont=HaranoAjiMincho-Bold.otf]\{HaranoAjiMincho-Regular.otf\}}\\
+\texttt{\string\setsansjfont[BoldFont=HaranoAjiGothic-Bold.otf]\{HaranoAjiGothic-Regular.otf\}}
+\end{block}
+  \begin{itemize}
+    \item Place these commands after \texttt{\string\usetheme\{enlp\}} and before \texttt{\string\begin\{document\}}.
+    \item Use \texttt{\string\setmainjfont} and \texttt{\string\setsansjfont} for the Japanese side of mixed Japanese-Latin text.
+    \item If you need luatexja-specific options such as JFM tuning, pass them in the optional argument.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Custom Fonts with XeLaTeX}
+\begin{block}{Example}
+\small
+\texttt{\string\usetheme\{enlp\}}\\
+\texttt{\string\setmainfont\{TeX Gyre Termes\}}\\
+\texttt{\string\setsansfont\{IBM Plex Sans\}}\\
+\texttt{\string\setmonofont\{JetBrains Mono\}}\\
+\texttt{\string\setCJKmainfont[BoldFont=HaranoAjiMincho-Bold.otf]\{HaranoAjiMincho-Regular.otf\}}\\
+\texttt{\string\setCJKsansfont[BoldFont=HaranoAjiGothic-Bold.otf]\{HaranoAjiGothic-Regular.otf\}}
+\end{block}
+  \begin{itemize}
+    \item XeLaTeX uses \texttt{xeCJK}, so Japanese fonts are changed with \texttt{\string\setCJKmainfont} and \texttt{\string\setCJKsansfont}.
+    \item The theme keeps body text in sans-serif by default, so \texttt{\string\setsansfont} and \texttt{\string\setCJKsansfont} are the most important pair.
+    \item Font names and font file names are both acceptable if XeTeX can resolve them.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Custom Fonts with pLaTeX / upLaTeX}
+\begin{block}{Example}
+\small
+\texttt{\string\documentclass[dvipdfmx]\{beamer\}}\\
+\texttt{\string\usepackage\{tgtermes\}}\\
+\texttt{\string\usetheme\{enlp\}}\\
+\texttt{\string\renewcommand\{\string\rmdefault\}\{qtm\}}\\
+\texttt{\string\renewcommand\{\string\sfdefault\}\{qhv\}}\\
+\texttt{\string\renewcommand\{\string\ttdefault\}\{lmtt\}}\\
+\texttt{\string\setminchofont\{HaranoAjiMincho-Regular.otf\}}\\
+\texttt{\string\setboldminchofont\{HaranoAjiMincho-Bold.otf\}}\\
+\texttt{\string\setgothicfont\{HaranoAjiGothic-Regular.otf\}}\\
+\texttt{\string\setboldgothicfont\{HaranoAjiGothic-Bold.otf\}}
+\end{block}
+  \begin{itemize}
+    \item Latin fonts are changed through normal LaTeX family declarations such as \texttt{\string\rmdefault}, \texttt{\string\sfdefault}, and \texttt{\string\ttdefault}.
+    \item Japanese fonts are changed through \texttt{pxchfon} commands such as \texttt{\string\setminchofont} and \texttt{\string\setgothicfont}.
+    \item Keep \texttt{dvipdfmx} enabled or the theme backgrounds and Japanese font mapping will not work correctly.
+    \item The same procedure applies to both pLaTeX and upLaTeX; upLaTeX is usually preferable for fully Unicode sources.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Default Typography}
@@ -218,14 +311,23 @@
     \item \texttt{\string\cite\{...\}} and \texttt{\string\enlptextcite\{...\}} produce superscripted numeric references such as \cite{doe2025}.
     \item \texttt{\string\enlpauthorcite\{...\}} produces an author-style citation, for example \enlpauthorcite{smith2024}.
     \item \texttt{\string\enlpparencite\{...\}} produces a parenthetical citation.
+    \item Citation keys used inside a frame are collected automatically and rendered as full entries in the footer.
     \item Footer bibliography labels remain ordinary bracketed numbers such as \texttt{[1]}.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Footer Citations and Bibliography Pages}
-  \framefullcite{doe2025,smith2024}
+\begin{frame}{Automatic Footer Citations}
+  This frame cites \cite{doe2025} and \enlpparencite{smith2024}, so both entries appear in the footer automatically.
   \begin{itemize}
-    \item \texttt{\string\framefullcite\{...\}} renders full bibliography entries in the footer area.
+    \item Repeated citations are deduplicated in first-use order.
+    \item \texttt{\string\usetheme[autocitefooter=false]\{enlp\}} disables the automatic footer behavior.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Manual Footer Citations and Bibliography Pages}
+  \framefullcite{smith2024,doe2025}
+  \begin{itemize}
+    \item \texttt{\string\framefullcite\{...\}} overrides the automatic footer content when you want a fixed set or order.
     \item Footer entries use the 12pt footer font, not the 24pt body font.
     \item \texttt{\string\insertbibliographyframe} inserts a bibliography section heading followed by bibliography pages.
     \item Bibliography pages themselves use the same 24pt body layout as regular content slides.
