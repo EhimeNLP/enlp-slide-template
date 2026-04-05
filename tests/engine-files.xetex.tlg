@@ -1,7 +1,7 @@
 This is a generated file for the l3build validation system.
 Don't change this file in any respect.
 ENLP build smoke test
-engine=unknown
+engine=xetex
 beamerthemeenlp.sty=yes
 enlpbeamer.bbx=yes
 enlpbeamer.cbx=yes
