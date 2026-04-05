@@ -6,13 +6,17 @@
   \ifLuaTeX
     \TYPE{engine=luatex}%
   \else
-    \ifupTeX
-      \TYPE{engine=uptex}%
+    \ifXeTeX
+      \TYPE{engine=xetex}%
     \else
-      \ifpTeX
-        \TYPE{engine=ptex}%
+      \ifupTeX
+        \TYPE{engine=uptex}%
       \else
-        \TYPE{engine=unknown}%
+        \ifpTeX
+          \TYPE{engine=ptex}%
+        \else
+          \TYPE{engine=unknown}%
+        \fi
       \fi
     \fi
   \fi
