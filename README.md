@@ -1,51 +1,30 @@
-# ENLP Beamer Theme
+# スライドテンプレート (Beamer Theme)
 
-ENLP スライドテンプレートを Beamer で再現するテーマです。
+愛媛大学自然言語処理研究室のスライドテンプレートをBeamerで再現するテーマです.
 
-## 対応エンジン
+## インストール
 
-- LuaLaTeX
-- XeLaTeX
-- pLaTeX
-- upLaTeX
+### Local
 
-和欧混植が崩れないことを重視し、既定で以下のフォント構成を使います。
+まず, 本リポジトリをローカル環境にクローンしてください.
 
-- 欧文サンセリフ: TeX Gyre Heros
-- 欧文等幅: Latin Modern Mono
-- 和文ゴシック: HaranoAji Gothic
-
-## 使い方
-
-Unicode 系エンジンでは通常どおりコンパイルできます。
-
-```tex
-\documentclass{beamer}
-\usetheme{enlp}
+```bash
+git clone https://github.com/EhimeNLP/enlp-slide-template.git
+cd enlp-slide-template
 ```
 
-pLaTeX / upLaTeX では `dvipdfmx` を必ず付けてください。
+#### Windows / macOS / Linux
 
-```tex
-\documentclass[dvipdfmx]{beamer}
-\usetheme{enlp}
+`l3build` を使用して, `TEXMFHOME` に追加してください.
+
+```bash
+l3build install
 ```
 
-## カスタムフォント
+### Overleaf
 
-既存のエンジン標準コマンドを、そのまま `\usetheme{enlp}` の後で使えます。
+wip...
 
-- LuaLaTeX: `\setmainfont`, `\setsansfont`, `\setmonofont`, `\setmainjfont`, `\setsansjfont`
-- XeLaTeX: `\setmainfont`, `\setsansfont`, `\setmonofont`, `\setCJKmainfont`, `\setCJKsansfont`
-- pLaTeX / upLaTeX: `\rmdefault`, `\sfdefault`, `\ttdefault` の変更に加え、`pxchfon` の `\setminchofont`, `\setgothicfont` など
+## 使用方法
 
-詳細な設定例は [docs/documentation.tex](/Users/yoneyama/workspace/github/enlp-slide-template/docs/documentation.tex) にあります。
-
-## メモ
-
-- タイトル・見出し・本文用の背景 PDF はテーマに同梱されています。
-- 参考文献は `biblatex + biber` と BibTeX の両方を利用できます。
-- `frame` 内で使った citation key は既定で自動収集され、footer に full citation が表示されます。
-- 自動 footer citation を止めたい場合は `\usetheme[autocitefooter=false]{enlp}` を使います。
-- footer の文献一覧を手動で固定したい場合は `\framefullcite{...}` を使います。
-- 詳しい使い方は [docs/documentation.tex](/Users/yoneyama/workspace/github/enlp-slide-template/docs/documentation.tex) を参照してください。
+使用方法については, [documentation.pdf](/Users/yoneyama/workspace/github/enlp-slide-template/docs/documentation.tex)を参照してください.
