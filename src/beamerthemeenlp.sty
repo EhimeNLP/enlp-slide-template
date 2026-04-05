@@ -11,6 +11,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage{graphicx}
 \RequirePackage{iftex}
+\RequirePackage{xparse}
 \RequirePackage[absolute,overlay]{textpos}
 \RequirePackage{tikz}
 \usetikzlibrary{calc}
@@ -19,36 +20,57 @@
   \PackageError{beamerthemeenlp}{This theme requires XeLaTeX or LuaLaTeX}{Compile with xelatex or lualatex.}
 \fi
 
-\RequirePackage{fontspec}
-\defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\newcommand{\enlp@setlatinfonts}{%
+  \setmainfont{texgyreheros-regular.otf}[%
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf
+  ]%
+  \setsansfont{texgyreheros-regular.otf}[%
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf
+  ]%
+  \setmonofont{lmmono10-regular.otf}[%
+    BoldFont=lmmonolt10-bold.otf,
+    ItalicFont=lmmono10-italic.otf,
+    BoldItalicFont=lmmonolt10-boldoblique.otf,
+    Scale=0.94
+  ]%
+}
+\newcommand{\enlp@dvipsdriver}{pgfsys-dvips.def}
 \ifLuaTeX
-  \RequirePackage{luatexja-fontspec}
-  \setmainfont{Helvetica Neue}
-  \setsansfont{Helvetica Neue}
-  \setmonofont{Menlo}
-  \setmainjfont[
-    UprightFont=* W3,
-    BoldFont=* W6,
-    YokoFeatures={JFM=prop}
-  ]{Hiragino Sans}
-  \setsansjfont[
-    UprightFont=* W3,
-    BoldFont=* W6,
-    YokoFeatures={JFM=prop}
-  ]{Hiragino Sans}
-\else
-  \RequirePackage{xeCJK}
-  \setmainfont{Helvetica Neue}
-  \setsansfont{Helvetica Neue}
-  \setmonofont{Menlo}
-  \setCJKmainfont[
-    BoldFont={Hiragino Sans W6}
-  ]{Hiragino Sans W3}
-  \setCJKsansfont[
-    BoldFont={Hiragino Sans W6}
-  ]{Hiragino Sans W3}
-\fi
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \RequirePackage[haranoaji,deluxe]{luatexja-preset}
+  \enlp@setlatinfonts
+\else\ifXeTeX
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \RequirePackage{bxdpx-beamer}
+  \RequirePackage{zxjatype}
+  \RequirePackage[haranoaji]{zxjafont}
+  \enlp@setlatinfonts
+\else\ifpTeX
+  \ifx\pgfsysdriver\enlp@dvipsdriver
+    \PackageError{beamerthemeenlp}{pLaTeX and upLaTeX require the dvipdfmx driver}{%
+      Compile with \string\documentclass[dvipdfmx]{beamer} and a dvipdfmx-based workflow.%
+    }%
+  \fi
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage{lmodern}
+  \RequirePackage[scale=0.94]{tgheros}
+  \RequirePackage[deluxe]{otf}
+  \RequirePackage{bxdpx-beamer}
+  \RequirePackage[haranoaji]{pxchfon}
+  \RequirePackage{pxjahyper}
+  \renewcommand{\bfdefault}{bx}
+\fi\fi\fi
 \renewcommand{\familydefault}{\sfdefault}
+\@ifundefined{kanjifamilydefault}{}{%
+  \renewcommand{\kanjifamilydefault}{\gtdefault}%
+}
+\hypersetup{unicode=true}
 
 \definecolor{enlpPrimary}{HTML}{19999A}
 \definecolor{enlpPrimaryDark}{HTML}{046969}
@@ -66,12 +88,22 @@
 \newcommand{\enlp@biblatexoptions}{}
 \newcommand{\enlp@bibtexoptions}{numbers,sort&compress,super}
 \newcommand{\enlp@bibtexstyle}{enlpbeamer}
+\newif\ifenlp@autocitefooter
+\enlp@autocitefootertrue
 \DeclareOptionBeamer{bib}[biblatex]{\def\enlp@selectedbibmode{#1}}
 \DeclareOptionBeamer{biblatex}{\def\enlp@selectedbibmode{biblatex}}
 \DeclareOptionBeamer{bibtex}{\def\enlp@selectedbibmode{bibtex}}
 \DeclareOptionBeamer{biblatexopts}{\def\enlp@biblatexoptions{#1}}
 \DeclareOptionBeamer{bibtexopts}{\def\enlp@bibtexoptions{#1}}
 \DeclareOptionBeamer{bibtexstyle}{\def\enlp@bibtexstyle{#1}}
+\DeclareOptionBeamer{autocitefooter}[true]{%
+  \ifdefstring{#1}{false}{%
+    \enlp@autocitefooterfalse
+  }{%
+    \enlp@autocitefootertrue
+  }%
+}
+\DeclareOptionBeamer{noautocitefooter}{\enlp@autocitefooterfalse}
 \ProcessOptionsBeamer
 
 \newcommand{\enlp@pagewidth}{33.87cm}
@@ -107,6 +139,7 @@
 \newcommand{\enlp@setactivebackground}[1]{\xdef\enlp@activebgpath{#1}}
 \enlp@setactivebackground{\enlp@contentbgpath}
 \newcommand{\enlp@framefooter}{}
+\let\enlp@autocitekeys\@empty
 \newcommand{\enlp@sectionsubtitle}{}
 \newcommand{\enlp@bibmode}{none}
 \newcommand{\enlp@bibfiles}{}
@@ -179,6 +212,78 @@
   \endNoHyper
   \endgroup
 }
+\newcommand{\enlp@addautocitekey}[1]{%
+  \begingroup
+  \edef\enlp@normalizedcitekey{\zap@space#1 \@empty}%
+  \ifstrempty{\enlp@normalizedcitekey}{}{%
+    \expandafter\ifinlist\expandafter{\enlp@normalizedcitekey}{\enlp@autocitekeys}{}{%
+      \ifx\enlp@autocitekeys\@empty
+        \xdef\enlp@autocitekeys{\enlp@normalizedcitekey}%
+      \else
+        \xdef\enlp@autocitekeys{\enlp@autocitekeys,\enlp@normalizedcitekey}%
+      \fi
+    }%
+  }%
+  \endgroup
+}
+\newcommand{\enlp@trackcitekeys}[1]{%
+  \ifenlp@autocitefooter
+    \def\do##1{\enlp@addautocitekey{##1}}%
+    \docsvlist{#1}%
+  \fi
+}
+\newcommand{\enlp@callcitemacro}[5]{%
+  \IfBooleanTF{#2}{%
+    \IfNoValueTF{#3}{%
+      \IfNoValueTF{#4}{%
+        #1*{#5}%
+      }{%
+        #1*[][#4]{#5}%
+      }%
+    }{%
+      \IfNoValueTF{#4}{%
+        #1*[#3]{#5}%
+      }{%
+        #1*[#3][#4]{#5}%
+      }%
+    }%
+  }{%
+    \IfNoValueTF{#3}{%
+      \IfNoValueTF{#4}{%
+        #1{#5}%
+      }{%
+        #1[][#4]{#5}%
+      }%
+    }{%
+      \IfNoValueTF{#4}{%
+        #1[#3]{#5}%
+      }{%
+        #1[#3][#4]{#5}%
+      }%
+    }%
+  }%
+}
+\newcommand{\enlp@installcitewrapper}[1]{%
+  \@ifundefined{#1}{}{%
+    \@ifundefined{enlp@orig@#1}{%
+      \csletcs{enlp@orig@#1}{#1}%
+      \expandafter\RenewDocumentCommand\csname #1\endcsname{s o o m}{%
+        \enlp@trackcitekeys{##4}%
+        \expandafter\enlp@callcitemacro\expandafter{\csname enlp@orig@#1\endcsname}{##1}{##2}{##3}{##4}%
+      }%
+    }{}%
+  }%
+}
+\newcommand{\enlp@installbiblatexcitewrappers}{%
+  \enlp@installcitewrapper{cite}%
+  \enlp@installcitewrapper{textcite}%
+  \enlp@installcitewrapper{parencite}%
+}
+\newcommand{\enlp@installbibtexcitewrappers}{%
+  \enlp@installcitewrapper{cite}%
+  \enlp@installcitewrapper{citet}%
+  \enlp@installcitewrapper{citep}%
+}
 \newcommand{\enlpusebiblatex}[2][]{%
   \@ifpackageloaded{biblatex}{}{%
     \RequirePackage[
@@ -189,6 +294,7 @@
   }%
   \gdef\enlp@bibmode{biblatex}%
   \addbibresource{#2}%
+  \enlp@installbiblatexcitewrappers
 }
 \newcommand{\enlpusebibtex}[3][]{%
   \@ifpackageloaded{natbib}{}{%
@@ -201,6 +307,7 @@
   \gdef\enlp@bibfiles{#3}%
   \bibliographystyle{#2}%
   \nobibliography*%
+  \enlp@installbibtexcitewrappers
 }
 \newcommand{\enlpusebibresource}[1]{%
   \ifdefstring{\enlp@selectedbibmode}{bibtex}{%
@@ -339,7 +446,24 @@
 \newcommand{\enlp@insertbibliographyframewithoutsection}[1][参考文献]{%
   \enlp@insertbibliographyframebody{#1}%
 }
-\AtBeginEnvironment{frame}{\gdef\enlp@framefooter{}}
+\newcommand{\enlp@resetframefooterstate}{%
+  \gdef\enlp@framefooter{}%
+  \global\let\enlp@autocitekeys\@empty
+}
+\newcommand{\enlp@renderframefooter}{%
+  \ifstrempty{\enlp@framefooter}{%
+    \ifenlp@autocitefooter
+      \ifdefstring{\enlp@bibmode}{none}{}{%
+        \ifstrempty{\enlp@autocitekeys}{}{%
+          \enlp@renderfullcites{\enlp@autocitekeys}%
+        }%
+      }%
+    \fi
+  }{%
+    \enlp@framefooter
+  }%
+}
+\AtBeginEnvironment{frame}{\enlp@resetframefooterstate}
 
 \mode<presentation>
 
@@ -463,7 +587,7 @@
   \begin{tikzpicture}[remember picture,overlay]
     \node[anchor=south west,text width=.72\paperwidth,inner sep=0pt,align=left]
       at ([xshift=.069\paperwidth,yshift=.045\paperheight]current page.south west)
-      {\usebeamerfont{footline}\color{enlpMuted}\enlp@framefooter};
+      {\usebeamerfont{footline}\color{enlpMuted}\enlp@renderframefooter};
     \node[anchor=south east,inner sep=0pt]
       at ([xshift=-.031\paperwidth,yshift=.043\paperheight]current page.south east)
       {\usebeamerfont{footline}\color{enlpMuted}\insertframenumber};
