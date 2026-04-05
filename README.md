@@ -27,4 +27,4 @@ wip...
 
 ## 使用方法
 
-使用方法については, [documentation.pdf](/Users/yoneyama/workspace/github/enlp-slide-template/docs/documentation.tex)を参照してください.
+使用方法については, [documentation.pdf](docs/documentation.pdf)を参照してください.
