@@ -21,8 +21,6 @@ LaTeX Warning: Citation 'smith2024' on page 1 undefined on input line ....
 autocitekeys=doe2025,smith2024
 LaTeX Font Info:    Font shape `TU/texgyreheros-regular.otf(0)/m/n' will be
 (Font)              scaled to size 30.50354pt on input line ....
-File: enlp-content-page.pdf Graphic file (type pdf)
-<use enlp-content-page.pdf>
 LaTeX Font Info:    Font shape `TU/texgyreheros-regular.otf(0)/m/n' will be
 (Font)              scaled to size 3.38928pt on input line ....
 [1
@@ -30,7 +28,5 @@ LaTeX Font Info:    Font shape `TU/texgyreheros-regular.otf(0)/m/n' will be
 LaTeX Warning: Citation 'smith2024' on page 2 undefined on input line ....
 manualfooter=manual footer
 autocitekeys=smith2024
-File: enlp-content-page.pdf Graphic file (type pdf)
-<use enlp-content-page.pdf>
 [2
 ]

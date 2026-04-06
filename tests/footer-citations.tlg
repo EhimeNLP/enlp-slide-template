@@ -41,11 +41,6 @@ LaTeX Font Info:    Font shape `JT3/HaranoAjiGothic-Regular.otf(0)/m/n' will be
 (Font)              scaled to size 34.6399pt on input line ....
 LaTeX Font Info:    Font shape `JY3/HaranoAjiGothic-Regular.otf(0)/m/n' will be
 (Font)              scaled to size 34.6399pt on input line ....
-<enlp-content-page.pdf, id=12, 963.3591pt x 542.025pt>
-File: enlp-content-page.pdf Graphic file (type pdf)
-<use enlp-content-page.pdf>
-Package luatex.def Info: enlp-content-page.pdf  used on input line ....
-(luatex.def)             Requested size: 963.73895pt x 542.04848pt.
 LaTeX Font Info:    Font shape `TU/texgyreheros-regular.otf(0)/m/n' will be
 (Font)              scaled to size 3.38928pt on input line ....
 LaTeX Font Info:    Font shape `JT3/HaranoAjiGothic-Regular.otf(0)/m/n' will be
@@ -53,13 +48,9 @@ LaTeX Font Info:    Font shape `JT3/HaranoAjiGothic-Regular.otf(0)/m/n' will be
 LaTeX Font Info:    Font shape `JY3/HaranoAjiGothic-Regular.otf(0)/m/n' will be
 (Font)              scaled to size 3.84888pt on input line ....
 [1
-<./enlp-content-page.pdf>]
+]
 LaTeX Warning: Citation 'smith2024' on page 2 undefined on input line ....
 manualfooter=manual footer
 autocitekeys=smith2024
-File: enlp-content-page.pdf Graphic file (type pdf)
-<use enlp-content-page.pdf>
-Package luatex.def Info: enlp-content-page.pdf  used on input line ....
-(luatex.def)             Requested size: 963.73895pt x 542.04848pt.
 [2
 ]
