@@ -1,0 +1,58 @@
+%%
+%% This is file `beamercolorthemeenlp.sty',
+%% Color theme for the Ehime NLP Lab Beamer theme.
+%%
+%% Author: Eito Yoneyama
+%% Created: 2026/04/06
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamercolorthemeenlp}[2026/04/06 Ehime NLP Lab Beamer color theme]
+
+\mode<presentation>
+
+% Colors from outer theme background
+\definecolor{cacbbbb}{RGB}{172,187,187}
+\definecolor{c18989a}{RGB}{24,152,154}
+\definecolor{c18999a}{RGB}{24,153,154}
+\definecolor{c585858}{RGB}{88,88,88}
+
+% Primary Theme Colors
+\definecolor{enlpPrimary}{HTML}{19999A}
+\definecolor{enlpPrimaryDark}{HTML}{046969}
+\definecolor{enlpPrimarySoft}{HTML}{759F99}
+\definecolor{enlpText}{HTML}{222222}
+\definecolor{enlpMuted}{HTML}{6E7474}
+\definecolor{enlpRule}{HTML}{B8C1C1}
+\definecolor{enlpBorder}{HTML}{C5CBCB}
+\definecolor{enlpWash}{HTML}{EAF3F1}
+\definecolor{enlpArcDark}{HTML}{6B7A7A}
+\definecolor{enlpArcLight}{HTML}{D7E1E2}
+\colorlet{enlpBibliographyColor}{black}
+
+\newcommand{\enlp@applybibliographycolor}{%
+  \hypersetup{citecolor=enlpBibliographyColor}%
+  \setbeamercolor{bibliography item}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry author}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry title}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry location}{fg=enlpBibliographyColor}%
+  \setbeamercolor{bibliography entry note}{fg=enlpBibliographyColor}%
+}
+\newcommand{\enlpsetbibliographycolor}[1]{%
+  \colorlet{enlpBibliographyColor}{#1}%
+  \enlp@applybibliographycolor
+}
+\newcommand{\enlpsetcitecolor}[1]{\enlpsetbibliographycolor{#1}}
+
+% Basic Beamer Colors
+\setbeamercolor{normal text}{fg=enlpText,bg=white}
+\setbeamercolor{structure}{fg=enlpPrimaryDark}
+\setbeamercolor{title}{fg=enlpText}
+\setbeamercolor{subtitle}{fg=enlpMuted}
+\setbeamercolor{frametitle}{fg=enlpText,bg=white}
+\setbeamercolor{framesubtitle}{fg=enlpMuted}
+\setbeamercolor{block title}{fg=white,bg=enlpPrimaryDark}
+\setbeamercolor{block body}{fg=enlpText,bg=enlpWash}
+\setbeamercolor{item projected}{fg=white,bg=enlpPrimaryDark}
+\enlp@applybibliographycolor
+
+\mode<all>
