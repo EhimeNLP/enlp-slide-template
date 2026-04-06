@@ -19,7 +19,7 @@
 \subtitle{User Guide and Package Reference}
 \author{Eito Yoneyama}
 \institute{Ehime University Natural Language Processing Laboratory}
-\date{April 5, 2026}
+\date{\today}
 
 \begin{document}
 
@@ -30,7 +30,7 @@
 \begin{frame}{Purpose}
   \begin{itemize}
     \item This document is the primary user documentation for the ENLP Beamer theme.
-    \item The package reproduces the ENLP PowerPoint template as a Beamer theme with fixed PDF backgrounds.
+    \item The package reproduces the ENLP PowerPoint template as a Beamer theme with natively drawn Ti\textit{k}Z backgrounds.
     \item The official theme name is \texttt{\string\usetheme\{enlp\}}.
     \item The document is also built by \texttt{l3build}, so the rendered PDF doubles as a packaging check.
   \end{itemize}
@@ -43,7 +43,7 @@
     \item The default page size is 33.87cm $\times$ 19.05cm.
     \item The default Latin sans font is \texttt{TeX Gyre Heros}; the default Japanese sans font is \texttt{HaranoAji Gothic}.
     \item The default monospaced font is \texttt{Latin Modern Mono}.
-    \item Title, heading, and content backgrounds are shipped with the package and loaded internally.
+    \item Title, heading, and content backgrounds are drawn natively using Ti\textit{k}Z.
   \end{itemize}
 \end{frame}
 
@@ -58,10 +58,9 @@
 
 \begin{frame}{Package Contents}
   \begin{itemize}
-    \item \texttt{beamerthemeenlp.sty}: theme implementation
-    \item \texttt{enlp-title-page.pdf}: title slide background
-    \item \texttt{enlp-heading-page.pdf}: section heading background
-    \item \texttt{enlp-content-page.pdf}: regular content slide background
+    \item \texttt{beamerthemeenlp.sty}: main theme integration
+    \item \texttt{beamer*themeenlp.sty}: split sub-themes (color, font, inner, outer)
+    \item \texttt{enlplogo.sty}: lab logo definitions
     \item \texttt{enlpbeamer.bbx}, \texttt{enlpbeamer.cbx}, \texttt{enlpbeamer.bst}: bibliography styles
   \end{itemize}
 \end{frame}
@@ -209,7 +208,7 @@
 
 \begin{frame}{Title Slide Defaults}
   \begin{itemize}
-    \item The title slide background is the fixed package asset \texttt{enlp-title-page.pdf}.
+    \item The title slide background is drawn internally via the outer theme.
     \item The subtitle and date are placed in the upper-left metadata region.
     \item The title is centered in the large middle box.
     \item Institute and author are centered in the lower metadata region.
@@ -245,7 +244,7 @@
 
 \begin{frame}{Regular Slide Geometry}
   \begin{itemize}
-    \item Regular slides use the fixed package asset \texttt{enlp-content-page.pdf}.
+    \item Regular slides use the natively drawn content background.
     \item The default left and right text margins are both 24mm.
     \item The content width is matched to the title underline length in the background.
     \item Frame contents are top-aligned instead of vertically centered.
@@ -266,7 +265,7 @@
 
 \begin{frame}{Section Heading Pages}
   \begin{itemize}
-    \item Section heading pages use the fixed package asset \texttt{enlp-heading-page.pdf}.
+    \item Section heading pages use the natively drawn heading background.
     \item The recommended command is \texttt{\string\enlpsectionframe\{...\}}.
     \item This command registers the section and immediately inserts the heading page.
     \item The default heading size is 48pt.
@@ -350,16 +349,15 @@
     \item \texttt{l3build doc} builds this documentation.
     \item \texttt{l3build install --full --dry-run} verifies the TDS installation layout without copying files into the live tree.
     \item The documentation PDF and source are installed under \texttt{doc/latex/enlp-beamer/}.
-    \item The theme, bibliography styles, and fixed background PDFs are installed under \texttt{tex/latex/enlp-beamer/}.
+    \item The theme files, logo package, and bibliography styles are installed under \texttt{tex/latex/enlp-beamer/}.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{TDS Layout}
   \begin{itemize}
     \item \texttt{tex/latex/enlp-beamer/beamerthemeenlp.sty}
-    \item \texttt{tex/latex/enlp-beamer/enlp-title-page.pdf}
-    \item \texttt{tex/latex/enlp-beamer/enlp-heading-page.pdf}
-    \item \texttt{tex/latex/enlp-beamer/enlp-content-page.pdf}
+    \item \texttt{tex/latex/enlp-beamer/beamer*themeenlp.sty}
+    \item \texttt{tex/latex/enlp-beamer/enlplogo.sty}
     \item \texttt{bibtex/bst/enlp-beamer/enlpbeamer.bst}
     \item \texttt{doc/latex/enlp-beamer/documentation.pdf}
   \end{itemize}
@@ -367,10 +365,10 @@
 
 \begin{frame}{Design Policy}
   \begin{itemize}
-    \item Background assets are intentionally fixed and package-internal.
+    \item Background assets are defined directly using Ti\textit{k}Z within the outer theme.
     \item User-facing customization is focused on text placement, page size, bibliography backend, and bibliography color.
     \item This keeps visual reproduction stable across local builds and installed TDS trees.
-    \item If the underlying artwork changes, the package assets should be regenerated and redistributed with the theme.
+    \item If the underlying artwork changes, the Ti\textit{k}Z drawing commands in the outer theme should be updated.
   \end{itemize}
 \end{frame}
 
