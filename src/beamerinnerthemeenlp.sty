@@ -1,0 +1,122 @@
+%%
+%% This is file `beamerinnerthemeenlp.sty',
+%% Inner theme for the Ehime NLP Lab Beamer theme.
+%%
+%% Author: Eito Yoneyama
+%% Created: 2026/04/06
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerinnerthemeenlp}[2026/04/06 Ehime NLP Lab Beamer inner theme]
+
+\RequirePackage[absolute,overlay]{textpos}
+
+\mode<presentation>
+
+% Title Page Positions
+\newcommand{\enlp@subtitlex}{.063\paperwidth}
+\newcommand{\enlp@subtitley}{-.090\paperheight}
+\newcommand{\enlp@subtitlewidth}{.28\paperwidth}
+\newcommand{\enlp@datex}{.063\paperwidth}
+\newcommand{\enlp@datey}{-.145\paperheight}
+\newcommand{\enlp@datewidth}{.30\paperwidth}
+\newcommand{\enlp@titlex}{.50\paperwidth}
+\newcommand{\enlp@titley}{-.47\paperheight}
+\newcommand{\enlp@titlewidth}{.78\paperwidth}
+\newcommand{\enlp@institutex}{.50\paperwidth}
+\newcommand{\enlp@institutey}{-.64\paperheight}
+\newcommand{\enlp@institutewidth}{.78\paperwidth}
+\newcommand{\enlp@authorx}{.50\paperwidth}
+\newcommand{\enlp@authory}{-.72\paperheight}
+\newcommand{\enlp@authorwidth}{.78\paperwidth}
+\newcommand{\enlp@sectionsubtitle}{}
+
+% Setters
+\newcommand{\sectionpagesubtitle}[1]{\gdef\enlp@sectionsubtitle{#1}}
+\newcommand{\enlpsetsubtitleposition}[2]{%
+  \gdef\enlp@subtitlex{#1}%
+  \gdef\enlp@subtitley{#2}%
+}
+\newcommand{\enlpsetsubtitlewidth}[1]{\gdef\enlp@subtitlewidth{#1}}
+\newcommand{\enlpsetdateposition}[2]{%
+  \gdef\enlp@datex{#1}%
+  \gdef\enlp@datey{#2}%
+}
+\newcommand{\enlpsetdatewidth}[1]{\gdef\enlp@datewidth{#1}}
+\newcommand{\enlpsettitleposition}[2]{%
+  \gdef\enlp@titlex{#1}%
+  \gdef\enlp@titley{#2}%
+}
+\newcommand{\enlpsettitlewidth}[1]{\gdef\enlp@titlewidth{#1}}
+\newcommand{\enlpsetinstituteposition}[2]{%
+  \gdef\enlp@institutex{#1}%
+  \gdef\enlp@institutey{#2}%
+}
+\newcommand{\enlpsetinstitutewidth}[1]{\gdef\enlp@institutewidth{#1}}
+\newcommand{\enlpsetauthorposition}[2]{%
+  \gdef\enlp@authorx{#1}%
+  \gdef\enlp@authory{#2}%
+}
+\newcommand{\enlpsetauthorwidth}[1]{\gdef\enlp@authorwidth{#1}}
+
+% Itemize and Lists
+\setbeamertemplate{bibliography item}[text]
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{itemize item}{\color{enlpPrimaryDark}\raise0.22ex\hbox{\fontsize{18}{18}\selectfont$\bullet$}}
+\setbeamertemplate{itemize subitem}{\color{enlpPrimarySoft}\raise0.22ex\hbox{\fontsize{12}{12}\selectfont$\blacksquare$}}
+
+% Blocks
+\defbeamertemplate*{block begin}{enlp}{%
+  \par\vskip\medskipamount%
+  \begin{beamercolorbox}[wd=\linewidth,sep=1.4mm,leftskip=1.6mm,rightskip=1.6mm]{block title}%
+    \usebeamerfont{block title}\insertblocktitle%
+  \end{beamercolorbox}%
+  {\parskip0pt\par}%
+  \begin{beamercolorbox}[wd=\linewidth,sep=1.8mm,leftskip=1.6mm,rightskip=1.6mm,vmode]{block body}%
+    \usebeamerfont{block body}%
+}
+\defbeamertemplate*{block end}{enlp}{%
+  \end{beamercolorbox}%
+}
+
+% Title Page
+\defbeamertemplate*{title page}{enlp}{
+  \ifx\insertsubtitle\@empty\else
+    \begin{textblock*}{\enlp@subtitlewidth}(\enlp@subtitlex,\dimexpr0pt-\enlp@subtitley\relax)
+      {\raggedright\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+    \end{textblock*}
+  \fi
+  \ifx\insertdate\@empty\else
+    \begin{textblock*}{\enlp@datewidth}(\enlp@datex,\dimexpr0pt-\enlp@datey\relax)
+      {\raggedright\usebeamerfont{date}\color{enlpText}\insertdate\par}
+    \end{textblock*}
+  \fi
+  \begin{textblock*}{\enlp@titlewidth}(\dimexpr\enlp@titlex-\enlp@titlewidth/2\relax,\dimexpr0pt-\enlp@titley\relax)
+    {\centering\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+  \end{textblock*}
+  \ifx\insertinstitute\@empty\else
+    \begin{textblock*}{\enlp@institutewidth}(\dimexpr\enlp@institutex-\enlp@institutewidth/2\relax,\dimexpr0pt-\enlp@institutey\relax)
+      {\centering\usebeamerfont{institute}\color{enlpText}\insertinstitute\par}
+    \end{textblock*}
+  \fi
+  \begin{textblock*}{\enlp@authorwidth}(\dimexpr\enlp@authorx-\enlp@authorwidth/2\relax,\dimexpr0pt-\enlp@authory\relax)
+    {\centering\usebeamerfont{author}\color{enlpText}\insertauthor\par}
+  \end{textblock*}
+  \null
+}
+
+% Section Page
+\defbeamertemplate*{section page}{enlp}{
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=center,text width=.76\paperwidth,align=center]
+      at ([yshift=.012\paperheight]current page.center)
+      {\usebeamerfont{section title}\color{enlpText}\insertsectionhead};
+    \ifx\enlp@sectionsubtitle\@empty\else
+      \node[anchor=center,text width=.56\paperwidth,align=center]
+        at ([yshift=-.126\paperheight]current page.center)
+        {\usebeamerfont{section subtitle}\color{enlpMuted}\enlp@sectionsubtitle};
+    \fi
+  \end{tikzpicture}
+  \vspace*{.74\paperheight}
+}
+
+\mode<all>
