@@ -28,8 +28,3 @@ wip...
 ## 使用方法
 
 使用方法については, [documentation.pdf](docs/documentation.pdf)を参照してください.
-
-## Todo
-
-- [ ] Switch title and regular page backgrounds from PDF inclusion to TikZ-based rendering
-- [ ] Implement the section page background using backend-dependent primitives (PDF literals / driver specials)
