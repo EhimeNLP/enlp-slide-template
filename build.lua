@@ -7,6 +7,11 @@ supportdir = sourcefiledir
 
 sourcefiles = {
   "beamerthemeenlp.sty",
+  "beamercolorthemeenlp.sty",
+  "beamerfontthemeenlp.sty",
+  "beamerinnerthemeenlp.sty",
+  "beamerouterthemeenlp.sty",
+  "enlplogo.sty",
   "enlpbeamer.bbx",
   "enlpbeamer.cbx",
   "enlpbeamer.bst",
@@ -17,6 +22,11 @@ sourcefiles = {
 
 installfiles = {
   "beamerthemeenlp.sty",
+  "beamercolorthemeenlp.sty",
+  "beamerfontthemeenlp.sty",
+  "beamerinnerthemeenlp.sty",
+  "beamerouterthemeenlp.sty",
+  "enlplogo.sty",
   "enlpbeamer.bbx",
   "enlpbeamer.cbx",
   "enlp-title-page.pdf",
@@ -38,6 +48,11 @@ typesetfiles = {
 
 typesetsourcefiles = {
   "beamerthemeenlp.sty",
+  "beamercolorthemeenlp.sty",
+  "beamerfontthemeenlp.sty",
+  "beamerinnerthemeenlp.sty",
+  "beamerouterthemeenlp.sty",
+  "enlplogo.sty",
   "enlpbeamer.bbx",
   "enlpbeamer.cbx",
   "enlpbeamer.bst",
@@ -52,6 +67,11 @@ docfiles = {
 
 checksuppfiles = {
   "beamerthemeenlp.sty",
+  "beamercolorthemeenlp.sty",
+  "beamerfontthemeenlp.sty",
+  "beamerinnerthemeenlp.sty",
+  "beamerouterthemeenlp.sty",
+  "enlplogo.sty",
   "enlpbeamer.bbx",
   "enlpbeamer.cbx",
   "enlpbeamer.bst",
@@ -69,6 +89,11 @@ tagfiles = {
   "README.md",
   "build.lua",
   "beamerthemeenlp.sty",
+  "beamercolorthemeenlp.sty",
+  "beamerfontthemeenlp.sty",
+  "beamerinnerthemeenlp.sty",
+  "beamerouterthemeenlp.sty",
+  "enlplogo.sty",
   "enlpbeamer.bbx",
   "enlpbeamer.cbx",
   "enlpbeamer.bst",
