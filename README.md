@@ -23,7 +23,7 @@ l3build install
 
 ### Overleaf
 
-wip...
+[Releases](https://github.com/EhimeNLP/enlp-slide-template/releases)から最新バージョンの `enlp-slide-template-v*.zip` を取得して, Overleafのプロジェクトに配置してください.
 
 ## 使用方法
 
