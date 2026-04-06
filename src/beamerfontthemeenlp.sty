@@ -1,0 +1,94 @@
+%%
+%% This is file `beamerfontthemeenlp.sty',
+%% Font theme for the Ehime NLP Lab Beamer theme.
+%%
+%% Author: Eito Yoneyama
+%% Created: 2026/04/06
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerfontthemeenlp}[2026/04/06 Ehime NLP Lab Beamer font theme]
+
+\RequirePackage{iftex}
+
+\mode<presentation>
+
+\ifPDFTeX
+  \PackageError{beamerthemeenlp}{This theme requires XeLaTeX or LuaLaTeX}{Compile with xelatex or lualatex.}
+\fi
+
+\newcommand{\enlp@setlatinfonts}{%
+  \setmainfont{texgyreheros-regular.otf}[%
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf
+  ]%
+  \setsansfont{texgyreheros-regular.otf}[%
+    BoldFont=texgyreheros-bold.otf,
+    ItalicFont=texgyreheros-italic.otf,
+    BoldItalicFont=texgyreheros-bolditalic.otf
+  ]%
+  \setmonofont{lmmono10-regular.otf}[%
+    BoldFont=lmmonolt10-bold.otf,
+    ItalicFont=lmmono10-italic.otf,
+    BoldItalicFont=lmmonolt10-boldoblique.otf,
+    Scale=0.94
+  ]%
+}
+
+\newcommand{\enlp@dvipsdriver}{pgfsys-dvips.def}
+\ifLuaTeX
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \RequirePackage[haranoaji,deluxe]{luatexja-preset}
+  \enlp@setlatinfonts
+\else\ifXeTeX
+  \RequirePackage{fontspec}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \RequirePackage{bxdpx-beamer}
+  \RequirePackage{zxjatype}
+  \RequirePackage[haranoaji]{zxjafont}
+  \enlp@setlatinfonts
+\else\ifpTeX
+  \ifx\pgfsysdriver\enlp@dvipsdriver
+    \PackageError{beamerthemeenlp}{pLaTeX and upLaTeX require the dvipdfmx driver}{%
+      Compile with \string\documentclass[dvipdfmx]{beamer} and a dvipdfmx-based workflow.%
+    }%
+  \fi
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage{lmodern}
+  \RequirePackage[scale=0.94]{tgheros}
+  \RequirePackage[deluxe]{otf}
+  \RequirePackage{bxdpx-beamer}
+  \RequirePackage[haranoaji]{pxchfon}
+  \RequirePackage{pxjahyper}
+  \renewcommand{\bfdefault}{bx}
+\fi\fi\fi
+
+\renewcommand{\familydefault}{\sfdefault}
+\@ifundefined{kanjifamilydefault}{}{%
+  \renewcommand{\kanjifamilydefault}{\gtdefault}%
+}
+
+% Font Sizes
+\setbeamerfont{normal text}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{title}{size=\fontsize{44}{52}\selectfont,series=\mdseries}
+\setbeamerfont{subtitle}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{author}{size=\fontsize{24}{28}\selectfont}
+\setbeamerfont{institute}{size=\fontsize{24}{28}\selectfont}
+\setbeamerfont{date}{size=\fontsize{24}{28}\selectfont}
+\setbeamerfont{frametitle}{size=\fontsize{36}{42}\selectfont,series=\mdseries}
+\setbeamerfont{framesubtitle}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{section title}{size=\fontsize{48}{56}\selectfont,series=\mdseries}
+\setbeamerfont{section subtitle}{size=\fontsize{20}{24}\selectfont}
+\setbeamerfont{footline}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{footnote}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{footnote mark}{size=\fontsize{12}{14}\selectfont}
+\setbeamerfont{block body}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{block body alerted}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{block body example}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{itemize/enumerate body}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{itemize/enumerate subbody}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{itemize/enumerate subsubbody}{size=\fontsize{24}{30}\selectfont}
+\setbeamerfont{block title}{size=\fontsize{24}{30}\selectfont,series=\bfseries}
+
+\mode<all>
