@@ -4,10 +4,10 @@
 %%
 %% Author: Eito Yoneyama
 %% Created: 2026/04/05
-%% Updated: 2026/04/06
+%% Updated: 2026/04/09
 %%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{beamerthemeenlp}[2026/04/06 Ehime NLP Lab Beamer theme]
+\ProvidesPackage{beamerthemeenlp}[2026/04/09 Ehime NLP Lab Beamer theme]
 
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
@@ -159,7 +159,9 @@
     ]{biblatex}%
   }%
   \gdef\enlp@bibmode{biblatex}%
-  \addbibresource{#2}%
+  \ifstrempty{#2}{}{%
+    \addbibresource{#2}%
+  }%
   \enlp@installbiblatexcitewrappers
 }
 \newcommand{\enlpusebibtex}[3][]{%
@@ -172,14 +174,20 @@
   \gdef\enlp@bibmode{bibtex}%
   \gdef\enlp@bibfiles{#3}%
   \bibliographystyle{#2}%
-  \nobibliography*%
+  \ifstrempty{#3}{}{%
+    \nobibliography*%
+  }%
   \enlp@installbibtexcitewrappers
 }
 \newcommand{\enlpusebibresource}[1]{%
   \ifdefstring{\enlp@selectedbibmode}{bibtex}{%
-    \filename@parse{#1}%
-    \edef\enlp@resolvedbibfile{\filename@area\filename@base}%
-    \expandafter\enlpusebibtex\expandafter[\enlp@bibtexoptions]{\enlp@bibtexstyle}{\enlp@resolvedbibfile}%
+    \ifstrempty{#1}{%
+      \expandafter\enlpusebibtex\expandafter[\enlp@bibtexoptions]{\enlp@bibtexstyle}{}%
+    }{%
+      \filename@parse{#1}%
+      \edef\enlp@resolvedbibfile{\filename@area\filename@base}%
+      \expandafter\enlpusebibtex\expandafter[\enlp@bibtexoptions]{\enlp@bibtexstyle}{\enlp@resolvedbibfile}%
+    }%
   }{%
     \expandafter\enlpusebiblatex\expandafter[\enlp@biblatexoptions]{#1}%
   }%
@@ -238,20 +246,55 @@
     }%
   }%
 }
-\newcommand{\enlp@renderfullcites}[1]{%
+\newcommand{\enlp@definebiblatexfootercite}{%
+  \@ifundefined{enlp@biblatexfullcite}{%
+    \DeclareCiteCommand{\enlp@biblatexfullcite}
+      {\renewcommand*{\finentrypunct}{}}%
+      {%
+        {\color{enlpBibliographyColor}\printtext[bibhyperref]{%
+          \mkbibbrackets{\printfield{labelprefix}\printfield{labelnumber}}%
+        }}\space
+        {\color{enlpBibliographyColor}\usedriver{}{\thefield{entrytype}}}%
+      }%
+      {\par}%
+      {}%
+  }{}%
+}
+\newcommand{\enlp@sortbibtexkeys}[1]{%
   \begingroup
-  \enlp@requirebibsupport{\string\framefullcite}%
+  \NAT@sort@cites{#1}%
+  \xdef\enlp@sortedkeys{\NAT@cite@list}%
+  \endgroup
+}
+\newcommand{\enlp@renderfullcites@biblatex}[1]{%
+  \begingroup
+  \enlp@definebiblatexfootercite
+  \enlp@biblatexfullcite{#1}%
+  \endgroup
+}
+\newcommand{\enlp@renderfullcites@bibtex}[1]{%
+  \begingroup
   \enlp@firstfootercitetrue
-  \def\do##1{%
+  \enlp@sortbibtexkeys{#1}%
+  \@for\enlp@citekey:=\enlp@sortedkeys\do{%
     \ifenlp@firstfootercite
       \enlp@firstfootercitefalse
     \else
       \par
     \fi
-    \enlp@printfullcite{##1}%
+    \expandafter\enlp@printfullcite\expandafter{\enlp@citekey}%
   }%
-  \docsvlist{#1}%
   \endgroup
+}
+\newcommand{\enlp@renderfullcites}[1]{%
+  \enlp@requirebibsupport{\string\framefullcite}%
+  \ifdefstring{\enlp@bibmode}{biblatex}{%
+    \enlp@renderfullcites@biblatex{#1}%
+  }{%
+    \ifdefstring{\enlp@bibmode}{bibtex}{%
+      \enlp@renderfullcites@bibtex{#1}%
+    }{}%
+  }%
 }
 \newcommand{\framefullcite}[1]{%
   \framefooter{\enlp@renderfullcites{#1}}%
