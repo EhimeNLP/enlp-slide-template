@@ -5,6 +5,10 @@ engine=luatex
 pgfdriver=pgfsys-luatex.def
 familydefault=texgyreheros-regular.otf(0)
 kanjifamilydefault=HaranoAjiGothic-Regular.otf(0)
+package:fontspec=loaded
+package:luatexja-fontspec=loaded
+package:xeCJK=not-loaded
+package:pxjahyper=not-loaded
 LaTeX Font Info:    Font shape `TU/texgyreheros-regular.otf(0)/m/n' will be
 (Font)              scaled to size 20.3357pt on input line ....
 LaTeX Font Info:    Font shape `JT3/HaranoAjiGothic-Regular.otf(0)/m/n' will be
