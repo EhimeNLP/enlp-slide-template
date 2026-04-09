@@ -4,16 +4,17 @@
 %%
 %% Author: Eito Yoneyama
 %% Created: 2026/04/06
+%% Updated: 2026/04/09
 %%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{beamerfontthemeenlp}[2026/04/06 Ehime NLP Lab Beamer font theme]
+\ProvidesPackage{beamerfontthemeenlp}[2026/04/09 Ehime NLP Lab Beamer font theme]
 
 \RequirePackage{iftex}
 
 \mode<presentation>
 
 \ifPDFTeX
-  \PackageError{beamerthemeenlp}{This theme requires XeLaTeX or LuaLaTeX}{Compile with xelatex or lualatex.}
+  \PackageError{beamerthemeenlp}{This theme does not support pdfLaTeX}{Compile with xelatex, lualatex, platex+dvipdfmx, or uplatex+dvipdfmx.}
 \fi
 
 \newcommand{\enlp@setlatinfonts}{%
@@ -35,33 +36,57 @@
   ]%
 }
 
-\newcommand{\enlp@dvipsdriver}{pgfsys-dvips.def}
+\newcommand{\enlp@setluajapanesefonts}{%
+  \setmainjfont[
+    BoldFont=HaranoAjiGothic-Bold.otf,
+    YokoFeatures={JFM=prop}
+  ]{HaranoAjiGothic-Regular.otf}%
+  \setsansjfont[
+    BoldFont=HaranoAjiGothic-Bold.otf,
+    YokoFeatures={JFM=prop}
+  ]{HaranoAjiGothic-Regular.otf}%
+  \setmonojfont[
+    BoldFont=HaranoAjiGothic-Bold.otf,
+    YokoFeatures={JFM=prop}
+  ]{HaranoAjiGothic-Regular.otf}%
+}
+
+\newcommand{\enlp@setxejapanesefonts}{%
+  \setCJKmainfont[
+    BoldFont=HaranoAjiGothic-Bold.otf
+  ]{HaranoAjiGothic-Regular.otf}%
+  \setCJKsansfont[
+    BoldFont=HaranoAjiGothic-Bold.otf
+  ]{HaranoAjiGothic-Regular.otf}%
+  \setCJKmonofont[
+    BoldFont=HaranoAjiGothic-Bold.otf
+  ]{HaranoAjiGothic-Regular.otf}%
+}
+
 \ifLuaTeX
   \RequirePackage{fontspec}
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
-  \RequirePackage[haranoaji,deluxe]{luatexja-preset}
+  \RequirePackage{luatexja-fontspec}
   \enlp@setlatinfonts
+  \enlp@setluajapanesefonts
 \else\ifXeTeX
   \RequirePackage{fontspec}
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
-  \RequirePackage{bxdpx-beamer}
-  \RequirePackage{zxjatype}
-  \RequirePackage[haranoaji]{zxjafont}
+  \RequirePackage{xeCJK}
   \enlp@setlatinfonts
+  \enlp@setxejapanesefonts
 \else\ifpTeX
-  \ifx\pgfsysdriver\enlp@dvipsdriver
-    \PackageError{beamerthemeenlp}{pLaTeX and upLaTeX require the dvipdfmx driver}{%
-      Compile with \string\documentclass[dvipdfmx]{beamer} and a dvipdfmx-based workflow.%
-    }%
-  \fi
-  \RequirePackage[T1]{fontenc}
-  \RequirePackage{lmodern}
-  \RequirePackage[scale=0.94]{tgheros}
-  \RequirePackage[deluxe]{otf}
   \RequirePackage{bxdpx-beamer}
-  \RequirePackage[haranoaji]{pxchfon}
   \RequirePackage{pxjahyper}
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage{textcomp}
+  \RequirePackage[scale=0.94]{tgheros}
+  \RequirePackage{lmodern}
+  \RequirePackage[deluxe]{otf}
+  \RequirePackage[haranoaji]{pxchfon}
   \renewcommand{\bfdefault}{bx}
+\else
+  \PackageError{beamerthemeenlp}{Unsupported engine}{Compile with xelatex, lualatex, platex+dvipdfmx, or uplatex+dvipdfmx.}
 \fi\fi\fi
 
 \renewcommand{\familydefault}{\sfdefault}
