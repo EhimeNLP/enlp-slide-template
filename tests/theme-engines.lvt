@@ -34,6 +34,13 @@
     \TYPE{kanjifamilydefault=\kanjifamilydefault}%
   }%
 }
+\newcommand\ENLPReportPackage[1]{%
+  \@ifpackageloaded{#1}{%
+    \TYPE{package:#1=loaded}%
+  }{%
+    \TYPE{package:#1=not-loaded}%
+  }%
+}
 \makeatother
 
 \title{和文 English Title}
@@ -49,6 +56,10 @@
 \TYPE{pgfdriver=\pgfsysdriver}
 \TYPE{familydefault=\familydefault}
 \ENLPReportKanjiFamily
+\ENLPReportPackage{fontspec}
+\ENLPReportPackage{luatexja-fontspec}
+\ENLPReportPackage{xeCJK}
+\ENLPReportPackage{pxjahyper}
 \enlptitleframe
 \begin{frame}{和欧混植 Mixed Typesetting}
   日本語とEnglishが同じ段落で自然につながることを確認する。
