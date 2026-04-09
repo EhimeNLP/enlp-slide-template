@@ -43,13 +43,15 @@
     \item The default page size is 33.87cm $\times$ 19.05cm.
     \item The default Latin sans font is \texttt{TeX Gyre Heros}; the default Japanese sans font is \texttt{HaranoAji Gothic}.
     \item The default monospaced font is \texttt{Latin Modern Mono}.
+    \item Under LuaLaTeX, mixed Japanese-Latin text is handled by \texttt{luatexja-fontspec} on top of \texttt{luaotfload}.
     \item Title, heading, and content backgrounds are drawn natively using Ti\textit{k}Z.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Engine-Specific Notes}
   \begin{itemize}
-    \item LuaLaTeX and XeLaTeX use Unicode-native Japanese support and the bundled HaranoAji font family.
+    \item LuaLaTeX uses \texttt{fontspec} with \texttt{luatexja-fontspec}; \texttt{luaotfload} resolves the Latin and Japanese OpenType fonts.
+    \item XeLaTeX uses \texttt{fontspec} with \texttt{xeCJK} and the same HaranoAji font family.
     \item pLaTeX and upLaTeX use a \texttt{dvipdfmx}-based workflow with \texttt{pxchfon} and \texttt{pxjahyper}.
     \item The theme defaults both Latin and Japanese body text to sans serif so mixed Japanese-Latin slides stay visually consistent.
     \item Hyperlinks and bookmarks are configured for Unicode output across every supported engine.
@@ -136,6 +138,7 @@
   \begin{itemize}
     \item Place these commands after \texttt{\string\usetheme\{enlp\}} and before \texttt{\string\begin\{document\}}.
     \item Use \texttt{\string\setmainjfont} and \texttt{\string\setsansjfont} for the Japanese side of mixed Japanese-Latin text.
+    \item LuaLaTeX relies on \texttt{luatexja-fontspec} for Japanese layout and \texttt{luaotfload} for font resolution, so this is the preferred path when mixed Japanese-Latin spacing matters.
     \item If you need luatexja-specific options such as JFM tuning, pass them in the optional argument.
   \end{itemize}
 \end{frame}
@@ -291,6 +294,7 @@
     \item The theme option \texttt{bib=biblatex} is the default.
     \item \texttt{bib=bibtex} switches to the bundled \texttt{enlpbeamer.bst}.
     \item In either mode, bibliography files are registered with \texttt{\string\enlpusebibresource\{...\}}.
+    \item If a document does not use bibliography features yet, \texttt{\string\enlpusebibresource} may be omitted entirely.
   \end{itemize}
 \end{frame}
 
@@ -303,6 +307,14 @@
 \texttt{\string\usetheme[bib=bibtex]\{enlp\}}\\
 \texttt{\string\enlpusebibresource\{references.bib\}}
 \end{block}
+\begin{block}{Backend Initialization Without a .bib File}
+\texttt{\string\usetheme[bib=biblatex]\{enlp\}}\\
+\texttt{\string\enlpusebibresource\{\}}
+\end{block}
+\begin{itemize}
+  \item This is useful when you want to decide the backend up front but do not have a bibliography database yet.
+  \item The same empty registration also works with \texttt{bib=bibtex}.
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Citation Semantics}
@@ -324,9 +336,10 @@
 \end{frame}
 
 \begin{frame}{Manual Footer Citations and Bibliography Pages}
-  \framefullcite{smith2024,doe2025}
+  \framefullcite{doe2025,smith2024}
   \begin{itemize}
-    \item \texttt{\string\framefullcite\{...\}} overrides the automatic footer content when you want a fixed set or order.
+    \item \texttt{\string\framefullcite\{...\}} overrides the automatic footer content with a fixed citation set.
+    \item Footer entries are rendered in bibliography-number order, even if keys are passed in a different order.
     \item Footer entries use the 12pt footer font, not the 24pt body font.
     \item \texttt{\string\insertbibliographyframe} inserts a bibliography section heading followed by bibliography pages.
     \item Bibliography pages themselves use the same 24pt body layout as regular content slides.
@@ -348,6 +361,7 @@
   \begin{itemize}
     \item \texttt{l3build doc} builds this documentation.
     \item \texttt{l3build install --full --dry-run} verifies the TDS installation layout without copying files into the live tree.
+    \item When running LuaLaTeX in a sandboxed or CI environment, make sure \texttt{luaotfload} has writable \texttt{TEXMFVAR} and \texttt{TEXMFCACHE} paths.
     \item The documentation PDF and source are installed under \texttt{doc/latex/enlp-beamer/}.
     \item The theme files, logo package, and bibliography styles are installed under \texttt{tex/latex/enlp-beamer/}.
   \end{itemize}
