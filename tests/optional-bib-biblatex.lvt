@@ -1,0 +1,34 @@
+\input regression-test.tex
+\def\ENLPClassOptions{}
+\ifdefined\kanjiskip
+  \edef\ENLPClassOptions{dvipdfmx}
+\fi
+\expandafter\documentclass\expandafter[\ENLPClassOptions]{beamer}
+\usetheme[bib=biblatex]{enlp}
+\enlpusebibresource{}
+
+\makeatletter
+\newcommand\ENLPReportBibState{%
+  \TYPE{bibmode=\enlp@bibmode}%
+  \edef\ENLPBibFiles{\detokenize\expandafter{\enlp@bibfiles}}%
+  \TYPE{bibfiles=\ENLPBibFiles}%
+}
+\makeatother
+
+\title{No bibliography file yet}
+\subtitle{biblatex backend}
+\author{Theme Test}
+\institute{Ehime University}
+\date{2026-04-09}
+
+\begin{document}
+\START
+\TYPE{ENLP optional bibliography test: biblatex}
+\ENLPReportBibState
+\enlptitleframe
+\begin{frame}{No .bib file}
+  This document initializes the bibliography backend without a database file.
+\end{frame}
+\TYPE{optionalbib=ok}
+\END
+\end{document}
