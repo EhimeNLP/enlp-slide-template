@@ -138,8 +138,24 @@
   \begin{itemize}
     \item Place these commands after \texttt{\string\usetheme\{enlp\}} and before \texttt{\string\begin\{document\}}.
     \item Use \texttt{\string\setmainjfont} and \texttt{\string\setsansjfont} for the Japanese side of mixed Japanese-Latin text.
+    \item The theme uses sans-serif and Japanese gothic text for slide bodies, so \texttt{\string\setsansfont} and \texttt{\string\setsansjfont} are the pair that changes what you see on most frames.
     \item LuaLaTeX relies on \texttt{luatexja-fontspec} for Japanese layout and \texttt{luaotfload} for font resolution, so this is the preferred path when mixed Japanese-Latin spacing matters.
     \item If you need luatexja-specific options such as JFM tuning, pass them in the optional argument.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{LuaLaTeX Font Troubleshooting}
+\begin{block}{If \texttt{\string\setmainfont} seems ignored}
+\small
+\texttt{\string\usetheme\{enlp\}}\\
+\texttt{\string\setsansfont[BoldFont=*Bold,FakeBold=2.5]\{LINE Seed JP\}}\\
+\texttt{\string\setsansjfont[BoldFont=*Bold,FakeBold=2.5]\{LINE Seed JP\}}
+\end{block}
+  \begin{itemize}
+    \item This theme is not like \texttt{ltjsarticle}: normal slide text does not use the Roman family by default.
+    \item \texttt{\string\setmainfont} and \texttt{\string\setmainjfont} only affect the Roman side, so they may not visibly change the frame body.
+    \item If you write both \texttt{\string\setmainfont[\ldots]\{...\}} and later \texttt{\string\setmainfont\{...\}}, the later command replaces the earlier options.
+    \item Loading \texttt{luatexja} and \texttt{luatexja-fontspec} manually is optional because the theme already loads them under LuaLaTeX.
   \end{itemize}
 \end{frame}
 
