@@ -366,6 +366,28 @@
   \gdef\enlp@framefooter{}%
   \global\let\enlp@autocitekeys\@empty
 }
+\newlength{\enlp@frametitleplaceholderheight}
+\newcommand{\enlp@framebodyfont}{%
+  \usebeamerfont{normal text}%
+  \usebeamercolor[fg]{normal text}%
+}
+\newcommand{\enlp@startframebodywithtitle}{%
+  \enlp@framebodyfont
+}
+\newcommand{\enlp@startframebodywithouttitle}{%
+  \enlp@framebodyfont
+  \ifbeamer@plainframe\else
+    \setlength{\enlp@frametitleplaceholderheight}{%
+      \dimexpr
+        \enlp@frametitletopskip+
+        \enlp@frametitleheight+
+        \enlp@frametitledepth+
+        \enlp@afterframetitleskip+
+        0.25em\relax
+    }%
+    \vspace*{\enlp@frametitleplaceholderheight}%
+  \fi
+}
 \newcommand{\enlp@renderframefooter}{%
   \ifstrempty{\enlp@framefooter}{%
     \ifenlp@autocitefooter
@@ -380,9 +402,11 @@
   }%
 }
 \AtBeginEnvironment{frame}{\enlp@resetframefooterstate}
-\AtBeginEnvironment{frame}{%
-  \usebeamerfont{normal text}%
-  \usebeamercolor[fg]{normal text}%
+\pretocmd{\beamer@@frametitle}{\enlp@startframebodywithtitle}{}{}
+\def\beamer@checkframetitle{%
+  \@ifnextchar\bgroup\beamer@inlineframetitle{%
+    \@ifnextchar\frametitle\relax\enlp@startframebodywithouttitle
+  }%
 }
 
 % Assign Templates
