@@ -366,6 +366,31 @@
   \gdef\enlp@framefooter{}%
   \global\let\enlp@autocitekeys\@empty
 }
+
+% Preserve leading brace groups while beamer collects frame environment bodies.
+\newif\ifenlp@framebodymarkerpending
+\newcommand{\enlp@framebodymarker}{}
+\newcommand{\enlp@collectmarkedframebody}{%
+  \ifenlp@framebodymarkerpending
+    \global\enlp@framebodymarkerpendingfalse
+    \expandafter\beamer@collect@@body\expandafter\enlp@framebodymarker
+  \else
+    \expandafter\beamer@collect@@body
+  \fi
+}
+\def\beamer@frameenv{%
+  \def\beamer@process@envbody{%
+    \endgroup
+    \expandafter\expandafter\expandafter\beamer@framecommand\expandafter\beamer@frameoptions\expandafter{\the\beamer@envbody}%
+  }%
+  \global\beamer@envbody{}%
+  \global\enlp@framebodymarkerpendingtrue
+  \def\beamer@begin@stack{b}%
+  \begingroup
+  \let\frame\enlp@collectmarkedframebody
+  \def\beamer@process@envbody{\frame}%
+  \beamer@process@envbody
+}
 \newlength{\enlp@frametitleplaceholderheight}
 \newcommand{\enlp@framebodyfont}{%
   \usebeamerfont{normal text}%
@@ -403,10 +428,14 @@
 }
 \AtBeginEnvironment{frame}{\enlp@resetframefooterstate}
 \pretocmd{\beamer@@frametitle}{\enlp@startframebodywithtitle}{}{}
-\def\beamer@checkframetitle{%
+\newcommand{\enlp@checkframetitle}{%
   \@ifnextchar\bgroup\beamer@inlineframetitle{%
     \@ifnextchar\frametitle\relax\enlp@startframebodywithouttitle
   }%
+}
+\newcommand{\enlp@checkmarkedframetitle}[1]{\enlp@checkframetitle}
+\def\beamer@checkframetitle{%
+  \@ifnextchar\enlp@framebodymarker\enlp@checkmarkedframetitle\enlp@checkframetitle
 }
 
 % Assign Templates
