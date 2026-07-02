@@ -1,0 +1,24 @@
+\input regression-test.tex
+\def\ENLPClassOptions{}
+\ifdefined\kanjiskip
+  \edef\ENLPClassOptions{dvipdfmx}
+\fi
+\expandafter\documentclass\expandafter[\ENLPClassOptions]{beamer}
+\usetheme{enlp}
+
+\newcount\ENLPFrametitleCount
+\addtobeamertemplate{frametitle}{%
+  \global\advance\ENLPFrametitleCount by 1\relax
+  \TYPE{frametitle-template-\the\ENLPFrametitleCount=used}%
+}{}
+
+\begin{document}
+\START
+\TYPE{ENLP empty frame title regression}
+\begin{frame}{ダミーたいとる}
+\end{frame}
+\begin{frame}{Dummy Title}
+\end{frame}
+\TYPE{frametitle-template-count=\the\ENLPFrametitleCount}
+\END
+\end{document}
