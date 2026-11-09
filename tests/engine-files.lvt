@@ -35,11 +35,9 @@
 \TYPE{ENLP build smoke test}
 \ENLPReportEngine
 \ENLPReportFile{beamerthemeenlp.sty}
+\ENLPReportFile{enlplogo.sty}
 \ENLPReportFile{enlpbeamer.bbx}
 \ENLPReportFile{enlpbeamer.cbx}
 \ENLPReportFile{enlpbeamer.bst}
-\ENLPReportFile{enlp-title-page.pdf}
-\ENLPReportFile{enlp-heading-page.pdf}
-\ENLPReportFile{enlp-content-page.pdf}
 \END
 \end{document}
