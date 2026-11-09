@@ -3,36 +3,10 @@ module = "enlp-beamer"
 sourcefiledir = "src"
 docfiledir = "docs"
 testfiledir = "tests"
-supportdir = sourcefiledir
+supportdir = docfiledir
 
-sourcefiles = {
-  "beamerthemeenlp.sty",
-  "beamercolorthemeenlp.sty",
-  "beamerfontthemeenlp.sty",
-  "beamerinnerthemeenlp.sty",
-  "beamerouterthemeenlp.sty",
-  "enlplogo.sty",
-  "enlpbeamer.bbx",
-  "enlpbeamer.cbx",
-  "enlpbeamer.bst",
-  "enlp-title-page.pdf",
-  "enlp-heading-page.pdf",
-  "enlp-content-page.pdf",
-}
-
-installfiles = {
-  "beamerthemeenlp.sty",
-  "beamercolorthemeenlp.sty",
-  "beamerfontthemeenlp.sty",
-  "beamerinnerthemeenlp.sty",
-  "beamerouterthemeenlp.sty",
-  "enlplogo.sty",
-  "enlpbeamer.bbx",
-  "enlpbeamer.cbx",
-  "enlp-title-page.pdf",
-  "enlp-heading-page.pdf",
-  "enlp-content-page.pdf",
-}
+sourcefiles = { "*.sty", "*.bbx", "*.cbx", "*.bst" }
+installfiles = { "*.sty", "*.bbx", "*.cbx" }
 
 bstfiles = {
   "enlpbeamer.bst",
@@ -46,39 +20,12 @@ typesetfiles = {
   "documentation.tex",
 }
 
-typesetsourcefiles = {
-  "beamerthemeenlp.sty",
-  "beamercolorthemeenlp.sty",
-  "beamerfontthemeenlp.sty",
-  "beamerinnerthemeenlp.sty",
-  "beamerouterthemeenlp.sty",
-  "enlplogo.sty",
-  "enlpbeamer.bbx",
-  "enlpbeamer.cbx",
-  "enlpbeamer.bst",
-  "enlp-title-page.pdf",
-  "enlp-heading-page.pdf",
-  "enlp-content-page.pdf",
-}
-
 docfiles = {
   ".latexmkrc",
 }
 
-checksuppfiles = {
-  "beamerthemeenlp.sty",
-  "beamercolorthemeenlp.sty",
-  "beamerfontthemeenlp.sty",
-  "beamerinnerthemeenlp.sty",
-  "beamerouterthemeenlp.sty",
-  "enlplogo.sty",
-  "enlpbeamer.bbx",
-  "enlpbeamer.cbx",
-  "enlpbeamer.bst",
-  "enlp-title-page.pdf",
-  "enlp-heading-page.pdf",
-  "enlp-content-page.pdf",
-}
+checkfiles = bstfiles
+checksuppfiles = bibfiles
 
 typesetexe = "lualatex"
 

@@ -1,25 +1,28 @@
-# スライドテンプレート (Beamer Theme)
+# スライドテンプレート
 
-愛媛大学自然言語処理研究室のスライドテンプレートをBeamerで再現するテーマです.
+愛媛大学自然言語処理研究室のスライドテンプレートです.
 
 ## インストール
 
-### Local
+### macOS / Linux
 
-まず, 本リポジトリをローカル環境にクローンしてください.
-
-```bash
-git clone https://github.com/EhimeNLP/enlp-slide-template.git
-cd enlp-slide-template
+```sh
+curl -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/scripts/install.sh | sh
 ```
 
-#### Windows / macOS / Linux
+システム全体にインストールする場合は, 末尾を `| sh -s -- --texmflocal` に変えてください.
 
-`l3build` を使用して, `TEXMFHOME` に追加してください.
+### Windows
 
-```bash
-l3build install
+PowerShellで以下を実行してください.
+
+```powershell
+$installer = curl.exe -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/scripts/install.ps1 | Out-String
+if ($LASTEXITCODE -ne 0) { throw 'Could not download the installer.' }
+& ([scriptblock]::Create($installer))
 ```
+
+システム全体にインストールする場合は, 管理者権限で起動したPowerShellで最後の行に `-System` を付けてください.
 
 ### Overleaf
 
@@ -40,3 +43,7 @@ l3build install
 ```
 
 ` \setmainfont[...] ` のあとにもう一度 ` \setmainfont{...} ` を書くと, 後ろの指定で前のオプションが上書きされる点にも注意してください.
+
+## License
+
+See [LICENSE](LICENSE) for the BSD 2-Clause license and [Third-Party Notices](THIRD_PARTY_NOTICES.md) for third-party attribution and license terms.

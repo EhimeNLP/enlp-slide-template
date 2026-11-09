@@ -8,29 +8,36 @@
 \enlpusebibresource{references.bib}
 
 \makeatletter
-\newcommand\ENLPReportAutoCites{%
-  \TYPE{autocitekeys=\enlp@autocitekeys}%
+\newcommand\ENLPReport[1]{%
+  \TIMO\TYPE{#1}\OMIT
 }
-\newcommand\ENLPReportManualFooter{%
-  \begingroup
-  \edef\ENLPManualFooter{\detokenize\expandafter{\enlp@framefooter}}%
-  \TYPE{manualfooter=\ENLPManualFooter}%
-  \endgroup
+\newcommand\ENLPReportAutoCites{%
+  \ENLPReport{autocitekeys=\enlp@autocitekeys}%
+}
+\renewcommand\enlp@renderfullcites[1]{%
+  \ENLPReport{rendered=#1}%
 }
 \makeatother
 
 \begin{document}
 \START
 \TYPE{ENLP auto footer citation test}
+\OMIT
 \begin{frame}{Automatic Footer}
-  Auto footer cites \cite{doe2025} and \cite{doe2025,smith2024}.
+  Auto footer cites \cite{doe2025, smith2024} and \cite{doe2025}.
   \ENLPReportAutoCites
 \end{frame}
 \begin{frame}{Manual Footer}
-  \framefooter{manual footer}
+  \framefooter{\ENLPReport{rendered=manual footer}manual footer}
   Manual footer still allows \cite{smith2024} in the body.
-  \ENLPReportManualFooter
   \ENLPReportAutoCites
 \end{frame}
+\frame{No citations.\ENLPReportAutoCites}
+\setkeys{beamerthemeenlp}{autocitefooter=false}
+\begin{frame}{Disabled Automatic Footer}
+  Auto footer should ignore \cite{doe2025}.
+  \ENLPReportAutoCites
+\end{frame}
+\TIMO
 \END
 \end{document}

@@ -5,6 +5,10 @@
 %% Author: Eito Yoneyama
 %% Created: 2026/04/05
 %% Updated: 2026/07/02
+%% 
+%% Frame collection and title detection include code adapted from
+%% Beamer's beamerbaseframe.sty under the LPPL, version 1.3c or later.
+%% See THIRD_PARTY_NOTICES.md for attribution and changes.
 %%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{beamerthemeenlp}[2026/07/02 Ehime NLP Lab Beamer theme]
@@ -34,7 +38,7 @@
 \DeclareOptionBeamer{bibtexopts}{\def\enlp@bibtexoptions{#1}}
 \DeclareOptionBeamer{bibtexstyle}{\def\enlp@bibtexstyle{#1}}
 \DeclareOptionBeamer{autocitefooter}[true]{%
-  \ifdefstring{#1}{false}{%
+  \ifstrequal{#1}{false}{%
     \enlp@autocitefooterfalse
   }{%
     \enlp@autocitefootertrue
@@ -60,7 +64,6 @@
 
 % Frame footer & Cite macros
 \newcommand{\enlp@framefooter}{}
-\let\enlp@autocitekeys\@empty
 \newcommand{\enlp@bibmode}{none}
 \newcommand{\enlp@bibfiles}{}
 \newif\ifenlp@firstfootercite
@@ -78,26 +81,16 @@
   \endNoHyper
   \endgroup
 }
-\newcommand{\enlp@addautocitekey}[1]{%
-  \begingroup
-  \edef\enlp@normalizedcitekey{\zap@space#1 \@empty}%
-  \ifstrempty{\enlp@normalizedcitekey}{}{%
-    \expandafter\ifinlist\expandafter{\enlp@normalizedcitekey}{\enlp@autocitekeys}{}{%
-      \ifx\enlp@autocitekeys\@empty
-        \xdef\enlp@autocitekeys{\enlp@normalizedcitekey}%
-      \else
-        \xdef\enlp@autocitekeys{\enlp@autocitekeys,\enlp@normalizedcitekey}%
-      \fi
-    }%
-  }%
-  \endgroup
-}
-\newcommand{\enlp@trackcitekeys}[1]{%
-  \ifenlp@autocitefooter
-    \def\do##1{\enlp@addautocitekey{##1}}%
-    \docsvlist{#1}%
-  \fi
-}
+\ExplSyntaxOn
+\clist_new:N \enlp@autocitekeys
+\cs_new_protected:Npn \enlp@trackcitekeys #1
+  {
+    \ifenlp@autocitefooter
+      \clist_gput_right:Ne \enlp@autocitekeys {#1}
+      \clist_gremove_duplicates:N \enlp@autocitekeys
+    \fi
+  }
+\ExplSyntaxOff
 \newcommand{\enlp@callcitemacro}[5]{%
   \IfBooleanTF{#2}{%
     \IfNoValueTF{#3}{%
@@ -132,7 +125,8 @@
 \newcommand{\enlp@installcitewrapper}[1]{%
   \@ifundefined{#1}{}{%
     \@ifundefined{enlp@orig@#1}{%
-      \csletcs{enlp@orig@#1}{#1}%
+      % natbib commands need a copy of the underlying robust implementation.
+      \ExpandArgs{cc}\NewCommandCopy{enlp@orig@#1}{#1}%
       \expandafter\RenewDocumentCommand\csname #1\endcsname{s o o m}{%
         \enlp@trackcitekeys{##4}%
         \expandafter\enlp@callcitemacro\expandafter{\csname enlp@orig@#1\endcsname}{##1}{##2}{##3}{##4}%
@@ -176,6 +170,13 @@
   \bibliographystyle{#2}%
   \ifstrempty{#3}{}{%
     \nobibliography*%
+    % Write the BibTeX database even when the deck only uses footer entries.
+    \AddToHook{enddocument}[enlp/bibtex]{%
+      \ifBR@star
+        \nobibliography{\enlp@bibfiles}%
+      \fi
+    }%
+    \DeclareHookRule{enddocument}{enlp/bibtex}{before}{bibentry}%
   }%
   \enlp@installbibtexcitewrappers
 }
@@ -337,17 +338,20 @@
   \@ifundefined{bibfont}{}{%
     \renewcommand*{\bibfont}{\fontsize{24}{30}\selectfont}%
   }%
-  \ifdefstring{\enlp@bibmode}{biblatex}{%
-    \begin{frame}[allowframebreaks]
-      \frametitle{#1}%
-      {\color{enlpBibliographyColor}\printbibliography[heading=none]}%
-    \end{frame}
-  }{%
-    \begin{frame}[allowframebreaks]
-      \frametitle{#1}%
-      {\color{enlpBibliographyColor}\bibliography{\enlp@bibfiles}}%
-    \end{frame}
+  \ifstrempty{#1}{}{%
+    % Beamer starts an auto-break frame before it reads its title.
+    \let\enlp@startframebodywithouttitle\enlp@startframebodywithtitle
   }%
+  \begin{frame}[t,allowframebreaks]
+    \frametitle{#1}%
+    {\color{enlpBibliographyColor}%
+      \ifdefstring{\enlp@bibmode}{biblatex}{%
+        \printbibliography[heading=none]%
+      }{%
+        \bibliography{\enlp@bibfiles}%
+      }%
+    }%
+  \end{frame}
   \endgroup
 }
 \newcommand{\insertbibliographyframe}{%
@@ -414,11 +418,11 @@
   \fi
 }
 \newcommand{\enlp@renderframefooter}{%
-  \ifstrempty{\enlp@framefooter}{%
+  \ifdefempty{\enlp@framefooter}{%
     \ifenlp@autocitefooter
       \ifdefstring{\enlp@bibmode}{none}{}{%
-        \ifstrempty{\enlp@autocitekeys}{}{%
-          \enlp@renderfullcites{\enlp@autocitekeys}%
+        \ifdefempty{\enlp@autocitekeys}{}{%
+          \expandafter\enlp@renderfullcites\expandafter{\enlp@autocitekeys}%
         }%
       }%
     \fi
@@ -426,7 +430,7 @@
     \enlp@framefooter
   }%
 }
-\AtBeginEnvironment{frame}{\enlp@resetframefooterstate}
+\pretocmd{\beamer@@@@frame}{\enlp@resetframefooterstate}{}{}
 \pretocmd{\beamer@@frametitle}{\enlp@startframebodywithtitle}{}{}
 \newcommand{\enlp@checkframetitle}{%
   \@ifnextchar\bgroup\beamer@inlineframetitle{%

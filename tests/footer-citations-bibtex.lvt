@@ -1,0 +1,19 @@
+\input regression-test.tex
+\def\ENLPClassOptions{}
+\ifdefined\kanjiskip
+  \edef\ENLPClassOptions{dvipdfmx}
+\fi
+\expandafter\documentclass\expandafter[\ENLPClassOptions]{beamer}
+\usetheme[bib=bibtex]{enlp}
+\enlpusebibresource{references.bib}
+
+\begin{document}
+\START
+\OMIT
+\begin{frame}{BibTeX Citations}
+  \cite{doe2025}, \citet*{smith2024}, and \citep[see][p. 1]{doe2025}.
+\end{frame}
+\TIMO
+\TYPE{BibTeX citation commands completed}
+\END
+\end{document}
