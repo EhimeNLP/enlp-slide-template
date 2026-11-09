@@ -40,3 +40,7 @@ l3build install
 ```
 
 ` \setmainfont[...] ` のあとにもう一度 ` \setmainfont{...} ` を書くと, 後ろの指定で前のオプションが上書きされる点にも注意してください.
+
+## License
+
+See [LICENSE](LICENSE) for the BSD 2-Clause license and [Third-Party Notices](THIRD_PARTY_NOTICES.md) for third-party attribution and license terms.
