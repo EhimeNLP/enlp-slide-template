@@ -125,7 +125,8 @@
 \newcommand{\enlp@installcitewrapper}[1]{%
   \@ifundefined{#1}{}{%
     \@ifundefined{enlp@orig@#1}{%
-      \csletcs{enlp@orig@#1}{#1}%
+      % natbib commands need a copy of the underlying robust implementation.
+      \ExpandArgs{cc}\NewCommandCopy{enlp@orig@#1}{#1}%
       \expandafter\RenewDocumentCommand\csname #1\endcsname{s o o m}{%
         \enlp@trackcitekeys{##4}%
         \expandafter\enlp@callcitemacro\expandafter{\csname enlp@orig@#1\endcsname}{##1}{##2}{##3}{##4}%
