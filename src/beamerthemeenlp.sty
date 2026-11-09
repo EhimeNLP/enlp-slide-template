@@ -38,7 +38,7 @@
 \DeclareOptionBeamer{bibtexopts}{\def\enlp@bibtexoptions{#1}}
 \DeclareOptionBeamer{bibtexstyle}{\def\enlp@bibtexstyle{#1}}
 \DeclareOptionBeamer{autocitefooter}[true]{%
-  \ifdefstring{#1}{false}{%
+  \ifstrequal{#1}{false}{%
     \enlp@autocitefooterfalse
   }{%
     \enlp@autocitefootertrue
@@ -64,7 +64,6 @@
 
 % Frame footer & Cite macros
 \newcommand{\enlp@framefooter}{}
-\let\enlp@autocitekeys\@empty
 \newcommand{\enlp@bibmode}{none}
 \newcommand{\enlp@bibfiles}{}
 \newif\ifenlp@firstfootercite
@@ -82,26 +81,16 @@
   \endNoHyper
   \endgroup
 }
-\newcommand{\enlp@addautocitekey}[1]{%
-  \begingroup
-  \edef\enlp@normalizedcitekey{\zap@space#1 \@empty}%
-  \ifstrempty{\enlp@normalizedcitekey}{}{%
-    \expandafter\ifinlist\expandafter{\enlp@normalizedcitekey}{\enlp@autocitekeys}{}{%
-      \ifx\enlp@autocitekeys\@empty
-        \xdef\enlp@autocitekeys{\enlp@normalizedcitekey}%
-      \else
-        \xdef\enlp@autocitekeys{\enlp@autocitekeys,\enlp@normalizedcitekey}%
-      \fi
-    }%
-  }%
-  \endgroup
-}
-\newcommand{\enlp@trackcitekeys}[1]{%
-  \ifenlp@autocitefooter
-    \def\do##1{\enlp@addautocitekey{##1}}%
-    \docsvlist{#1}%
-  \fi
-}
+\ExplSyntaxOn
+\clist_new:N \enlp@autocitekeys
+\cs_new_protected:Npn \enlp@trackcitekeys #1
+  {
+    \ifenlp@autocitefooter
+      \clist_gput_right:Ne \enlp@autocitekeys {#1}
+      \clist_gremove_duplicates:N \enlp@autocitekeys
+    \fi
+  }
+\ExplSyntaxOff
 \newcommand{\enlp@callcitemacro}[5]{%
   \IfBooleanTF{#2}{%
     \IfNoValueTF{#3}{%
@@ -418,11 +407,11 @@
   \fi
 }
 \newcommand{\enlp@renderframefooter}{%
-  \ifstrempty{\enlp@framefooter}{%
+  \ifdefempty{\enlp@framefooter}{%
     \ifenlp@autocitefooter
       \ifdefstring{\enlp@bibmode}{none}{}{%
-        \ifstrempty{\enlp@autocitekeys}{}{%
-          \enlp@renderfullcites{\enlp@autocitekeys}%
+        \ifdefempty{\enlp@autocitekeys}{}{%
+          \expandafter\enlp@renderfullcites\expandafter{\enlp@autocitekeys}%
         }%
       }%
     \fi
@@ -430,7 +419,7 @@
     \enlp@framefooter
   }%
 }
-\AtBeginEnvironment{frame}{\enlp@resetframefooterstate}
+\pretocmd{\beamer@@@@frame}{\enlp@resetframefooterstate}{}{}
 \pretocmd{\beamer@@frametitle}{\enlp@startframebodywithtitle}{}{}
 \newcommand{\enlp@checkframetitle}{%
   \@ifnextchar\bgroup\beamer@inlineframetitle{%
