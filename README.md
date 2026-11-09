@@ -4,22 +4,25 @@
 
 ## インストール
 
-### Local
+### macOS / Linux
 
-まず, 本リポジトリをローカル環境にクローンしてください.
-
-```bash
-git clone https://github.com/EhimeNLP/enlp-slide-template.git
-cd enlp-slide-template
+```sh
+curl -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/scripts/install.sh | sh
 ```
 
-#### Windows / macOS / Linux
+システム全体にインストールする場合は, 末尾を `| sh -s -- --texmflocal` に変えてください.
 
-`l3build` を使用して, `TEXMFHOME` に追加してください.
+### Windows
 
-```bash
-l3build install
+PowerShellで以下を実行してください.
+
+```powershell
+$installer = curl.exe -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/scripts/install.ps1 | Out-String
+if ($LASTEXITCODE -ne 0) { throw 'Could not download the installer.' }
+& ([scriptblock]::Create($installer))
 ```
+
+システム全体にインストールする場合は, 管理者権限で起動したPowerShellで最後の行に `-System` を付けてください.
 
 ### Overleaf
 

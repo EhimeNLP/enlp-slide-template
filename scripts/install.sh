@@ -1,0 +1,95 @@
+#!/bin/sh
+
+fail() {
+    printf '%s\n' "$1" >&2
+    exit 1
+}
+
+install_files() {
+    for file in "$@" "$src/enlpbeamer.bst"; do
+        [ -f "$file" ] || fail "Release $tag is missing ${file##*/}."
+    done
+
+    tex_dir="$texmf/tex/latex/enlp-beamer"
+    bst_dir="$texmf/bibtex/bst/enlp-beamer"
+    ${admin:+sudo} mkdir -p "$tex_dir" "$bst_dir"
+    ${admin:+sudo} cp "$@" "$tex_dir/"
+    ${admin:+sudo} cp "$src/enlpbeamer.bst" "$bst_dir/"
+}
+
+install_enlp() {
+    set -eu
+
+    [ "$#" -le 1 ] || fail 'Specify at most one installation scope.'
+    scope=TEXMFHOME
+    case ${1-} in
+        ''|--texmfhome) ;;
+        --texmflocal) scope=TEXMFLOCAL ;;
+        -h|--help)
+            printf '%s\n' 'Usage: sh install.sh [--texmfhome|--texmflocal]'
+            return
+            ;;
+        *) fail "Unknown option: $1" ;;
+    esac
+
+    if ! command -v tlmgr >/dev/null 2>&1 &&
+        miktex_path=$(command -v miktex) && command -v initexmf >/dev/null 2>&1; then
+        report=$(initexmf --report)
+        if [ "$scope" = TEXMFLOCAL ]; then
+            texmf=$(printf '%s\n' "$report" | sed -n 's/^CommonInstall: //p')
+            set -- "$miktex_path" --admin fndb refresh
+        else
+            texmf=$(printf '%s\n' "$report" | sed -n 's/^UserInstall: //p')
+            set -- "$miktex_path" fndb refresh
+        fi
+    elif command -v kpsewhich >/dev/null 2>&1; then
+        texmf=$(kpsewhich -var-value="$scope") || fail "Could not locate $scope."
+        set --
+        if [ "$scope" = TEXMFLOCAL ]; then
+            mktexlsr_path=$(command -v mktexlsr) || fail 'mktexlsr is required for TEXMFLOCAL.'
+            set -- "$mktexlsr_path" "$texmf"
+        fi
+    else
+        fail 'TeX Live or MiKTeX is required.'
+    fi
+    case $texmf in
+        *:*|*[{}]*|*'
+'*) fail "Expected one TEXMF directory, got: $texmf" ;;
+        /*) ;;
+        *) fail "Could not determine an absolute TEXMF directory: $texmf" ;;
+    esac
+
+    workdir=$(mktemp -d "${TMPDIR:-/tmp}/enlp-beamer.XXXXXX")
+    trap 'rm -rf "$workdir"' 0
+    trap 'exit 1' HUP INT TERM
+    releases=https://github.com/EhimeNLP/enlp-slide-template/releases
+    latest_url=$(curl -fsSIL -o /dev/null -w '%{url_effective}' "$releases/latest")
+    case $latest_url in
+        "$releases/tag/"v?*) ;;
+        *) fail "Unexpected release URL: $latest_url" ;;
+    esac
+    tag=${latest_url#"$releases/tag/"}
+    case $tag in
+        *[!A-Za-z0-9._-]*) fail "Unexpected release URL: $latest_url" ;;
+    esac
+    archive="$workdir/enlp-slide-template.zip"
+    curl -fsSL "$releases/download/$tag/enlp-slide-template-$tag.zip" -o "$archive"
+    unzip -q "$archive" -d "$workdir"
+    src="$workdir/enlp-slide-template"
+
+    admin=
+    if [ "$scope" = TEXMFLOCAL ] && [ "$(id -u)" -ne 0 ]; then
+        admin=1
+    fi
+    install_files \
+        "$src/beamerthemeenlp.sty" "$src/beamercolorthemeenlp.sty" \
+        "$src/beamerfontthemeenlp.sty" "$src/beamerinnerthemeenlp.sty" \
+        "$src/beamerouterthemeenlp.sty" "$src/enlplogo.sty" \
+        "$src/enlpbeamer.bbx" "$src/enlpbeamer.cbx"
+    if [ "$#" -gt 0 ]; then
+        ${admin:+sudo} "$@"
+    fi
+    printf 'Installed enlp-beamer %s in %s\n' "$tag" "$texmf"
+}
+
+install_enlp "$@"
