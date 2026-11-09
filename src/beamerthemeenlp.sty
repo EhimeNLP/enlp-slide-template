@@ -170,6 +170,13 @@
   \bibliographystyle{#2}%
   \ifstrempty{#3}{}{%
     \nobibliography*%
+    % Write the BibTeX database even when the deck only uses footer entries.
+    \AddToHook{enddocument}[enlp/bibtex]{%
+      \ifBR@star
+        \nobibliography{\enlp@bibfiles}%
+      \fi
+    }%
+    \DeclareHookRule{enddocument}{enlp/bibtex}{before}{bibentry}%
   }%
   \enlp@installbibtexcitewrappers
 }
