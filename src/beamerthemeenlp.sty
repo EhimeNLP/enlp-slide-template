@@ -338,17 +338,20 @@
   \@ifundefined{bibfont}{}{%
     \renewcommand*{\bibfont}{\fontsize{24}{30}\selectfont}%
   }%
-  \ifdefstring{\enlp@bibmode}{biblatex}{%
-    \begin{frame}[allowframebreaks]
-      \frametitle{#1}%
-      {\color{enlpBibliographyColor}\printbibliography[heading=none]}%
-    \end{frame}
-  }{%
-    \begin{frame}[allowframebreaks]
-      \frametitle{#1}%
-      {\color{enlpBibliographyColor}\bibliography{\enlp@bibfiles}}%
-    \end{frame}
+  \ifstrempty{#1}{}{%
+    % Beamer starts an auto-break frame before it reads its title.
+    \let\enlp@startframebodywithouttitle\enlp@startframebodywithtitle
   }%
+  \begin{frame}[t,allowframebreaks]
+    \frametitle{#1}%
+    {\color{enlpBibliographyColor}%
+      \ifdefstring{\enlp@bibmode}{biblatex}{%
+        \printbibliography[heading=none]%
+      }{%
+        \bibliography{\enlp@bibfiles}%
+      }%
+    }%
+  \end{frame}
   \endgroup
 }
 \newcommand{\insertbibliographyframe}{%
