@@ -17,9 +17,7 @@ curl -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/s
 PowerShellで以下を実行してください.
 
 ```powershell
-$installer = curl.exe -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/scripts/install.ps1 | Out-String
-if ($LASTEXITCODE -ne 0) { throw 'Could not download the installer.' }
-& ([scriptblock]::Create($installer))
+& ([scriptblock]::Create((curl.exe -fsSL https://raw.githubusercontent.com/EhimeNLP/enlp-slide-template/main/scripts/install.ps1 | Out-String)))
 ```
 
 システム全体にインストールする場合は, 管理者権限で起動したPowerShellで最後の行に `-System` を付けてください.
